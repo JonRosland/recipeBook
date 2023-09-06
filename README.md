@@ -1,6 +1,6 @@
 # default recipe
 {
-    "recipeName": "meatballs",
+  "recipeName": "meatballs",
   "origin": "mom",
   "category": "dinner",
   "portion": 2,

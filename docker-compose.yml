@@ -1,33 +1,47 @@
 version: '3.1'
 
 services:
-
   mongo:
     image: mongo:latest
     container_name: mongodb
-    restart: unless-stopped
+    hostname: mongo
+    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-#    volumes:
-#      - mongo_data:/data/db
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27017:27017"
+    networks:
+      - mongo
+    volumes:
+      - mongo-data:/data/db
+      - mongo-config:/data/configdb
 
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    hostname: mongo-express
+    restart: always
+    #useUnifiedTopology: true
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_URL: "mongodb://mongo:27017"
+    ports:
+      - "8081:8081"
+    networks:
+      - mongo
+    depends_on:
+      - mongo
+    links:
+      - mongo
+
+networks:
+  mongo:
+    driver: bridge
 
 volumes:
-  mongodb_data_cont:
-
-
-#  mongo-express:
-#    image: mongo-express:latest
-#    container_name: mongo_express
-#    restart: unless-stopped
-#    ports:
-#      - 8081:8081
-#    environment:
-#      ME_CONFIG_OPTIONS_EDITORTHEME: ambiance
-#      ME_CONFIG_MONGODB_SERVER: mongo
-#      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-#      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-#      ME_CONFIG_MONGODB_URL: mongo://root:example@mongo:27017/
-#      ME_CONFIG_BASICAUTH_USERNAME: user
-#      ME_CONFIG_BASICAUTH_PASSWORD: userpwd
+  mongo-data:
+  mongo-config:

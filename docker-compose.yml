@@ -22,7 +22,6 @@ services:
     container_name: mongo-express
     hostname: mongo-express
     restart: always
-    #useUnifiedTopology: true
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: root

@@ -1,0 +1,31 @@
+{
+    "_id": "???????",
+    "recipeName": "meatballs",
+    "origin": "mom",
+    "category": "dinner",
+    "portion": 2,
+
+    
+    "ingredients":[
+        {
+        "name": "carrot",
+        "quantity": 2,
+        "unit": "kg"
+        },
+        {
+        "name": "potato",
+        "quantity": 2,
+        "unit": "kg"
+        }
+    ],
+
+    "steps": [
+        "description",
+        "description"
+    ],
+
+    "notes": [
+        "note1", 
+        "note2"
+    ]
+    }

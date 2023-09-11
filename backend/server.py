@@ -1,30 +1,24 @@
 from pymongo import MongoClient
+from recipeClass import Recipe, Ingredient
+import json
+
+def load_recipe_from_json_file(file_path):
+    with open(file_path, 'r') as file:
+        json_data = json.load(file)
+        return Recipe.from_json(json_data)
 
 
 if __name__ == "__main__":   
   
-    client = MongoClient("mongodb://localhost:27017")
+    client = MongoClient("mongodb://root:root@localhost:27017")
     client.server_info()
 
-    db = client["mydatabase"]
-    print(db)
+    db = client["coockbookdb"]
+    recipes_col = db["recipes"]
 
-    print("5")
-    mycol = db["customers"]
 
-    print("4")
-    mydict = { "name": "John", "address": "Highway 37" }
-    print("6")
-    x = mycol.insert_one(mydict)
-    print("7")
-    print(x.inserted_id)
+    x = recipes_col.insert_one(meatballs)
 
-    print("1")
     print(client.list_database_names())
 
-    print("2")
-    dblist = client.list_database_names()
 
-    print("3")
-    if "mydatabase" in dblist:
-        print("The database exists.")

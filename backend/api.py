@@ -2,19 +2,19 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-messages = []
 
 @app.route('/recipes', methods=['GET', 'POST'])
 
-def handle_messages():
-    if request.method == 'GET':
-        return jsonify(messages)
-    
-    elif request.method == 'POST':
-        new_message = request.get_json()
-        messages.append(new_message)
-        print(new_message)
-        return jsonify(new_message), 201
+#create a simple api to get a post request and return a json object
+def recipes():
+    if request.method == 'POST':
+        data = request.get_json()
+        return jsonify({'data': data}), 201
+    else:
+        return jsonify({'data': 'Hello World'})
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
+

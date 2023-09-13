@@ -3,18 +3,25 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 
-@app.route('/recipes', methods=['GET', 'POST'])
-
-#create a simple api to get a post request and return a json object
-def recipes():
+@app.route('/recipes', methods=['POST', 'GET'])
+def addRecipe():
     if request.method == 'POST':
         data = request.get_json()
-        return jsonify({'data': data}), 201
+        return jsonify(data), 201
+    elif request.method == 'GET':
+        data = request.get_json()
+        return jsonify(data), 201
     else:
         return jsonify({'data': 'Hello World'})
-
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    
+@app.route('/recipes/<id>', methods=['GET', 'PUT', 'DELETE'])
+def getRecipe(id):
+    if request.method == 'GET':
+        return jsonify({'data': 'Hello World'})
+    elif request.method == 'PUT':
+        return jsonify({'data': 'Hello World'})
+    elif request.method == 'DELETE':
+        return jsonify({'data': 'Hello World'})
+    else:
+        return jsonify({'data': 'Hello World'})
 

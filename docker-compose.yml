@@ -14,8 +14,8 @@ services:
     networks:
       - mongo
     volumes:
-      - mongo-data:/data/db
-      - mongo-config:/data/configdb
+      - ./mongodb/mongo-data:/data/db
+      - ./mongodb/mongo-config:/data/configdb
 
   mongo-express:
     image: mongo-express:latest
@@ -40,7 +40,3 @@ services:
 networks:
   mongo:
     driver: bridge
-
-volumes:
-  mongo-data:
-  mongo-config:

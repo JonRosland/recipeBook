@@ -1,65 +1,35 @@
-# default recipe
-{
-  "_id": "???????"
-  "recipeName": "meatballs",
-  "origin": "mom",
-  "category": "dinner",
-  "portion": 2,
-
-  
-  "ingredients":[
-    {
-      "name": "carrot",
-      "quantity": 2,
-      "unit": "kg"
-    },
-    {
-      "name": "potato",
-      "quantity": 2,
-      "unit": "kg"
-    }
-  ],
-
-  "steps": [
-    "description",
-    "description"
-  ],
-
-  "notes": [
-    "note1", 
-    "note2"
-  ]
-}
-
-# Enten oppe eller nede, tenker den nede da det minner mest om dictioanry som igjenn liner på hvordan mongo lagrer data
-
-meatballs = {
-  "_id": "???????"
-  "origin": "mom",
-  "category": "dinner",
-  "portion": 2,
-
-  
-  "ingredients":[
-    {
-      "name": "carrot",
-      "quantity": 2,
-      "unit": "kg"
-    },
-    {
-      "name": "potato",
-      "quantity": 2,
-      "unit": "kg"
-    }
-  ],
-
-  "steps": [
-    "description",
-    "description"
-  ],
-
-  "notes": [
-    "note1", 
-    "note2"
-  ]
-}
+.
+└── recipeBook
+    ├── 1.drawio
+    ├── 1.drawio:Zone.Identifier
+    ├── README.md
+    ├── backend
+    │   ├── __pycache__
+    │   │   ├── api.cpython-310.pyc
+    │   │   └── recipeClass.cpython-310.pyc
+    │   ├── api.py
+    │   ├── recipeClass.py
+    │   ├── recipeEx.json
+    │   ├── server.py
+    │   └── usageEx.py
+    ├── docker-compose.yml
+    ├── frontend
+    │   ├── models
+    │   │   └── recipeModel.js
+    │   ├── package-lock.json
+    │   ├── package.json
+    │   ├── src
+    │   │   ├── app.html
+    │   │   ├── lib
+    │   │   │   ├── index.js
+    │   │   │   └── server.js
+    │   │   ├── models
+    │   │   │   └── recipeModel.js
+    │   │   └── routes
+    │   │       └── +page.svelte
+    │   ├── static
+    │   │   └── favicon.png
+    │   ├── svelte.config.js
+    │   └── vite.config.js
+    ├── install.sh
+    └── requirements.txt

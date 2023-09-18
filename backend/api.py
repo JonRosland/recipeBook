@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 
 app = Flask(__name__)
 
@@ -13,6 +13,9 @@ def addRecipe():
         return jsonify(data), 201
     else:
         return jsonify({'data': 'Hello World'})
+
+def getRecipes():
+    return jsonify({'data': 'Hello World'})
     
 @app.route('/recipes/<id>', methods=['GET', 'PUT', 'DELETE'])
 def getRecipe(id):

@@ -19,7 +19,6 @@ if __name__ == "__main__":
     db = connectToDB()
 
 
-
     with open('/home/jonro/recipeBook/backend/recipeEx.json', 'r') as file:
         json_data = json.load(file)
 

@@ -1,8 +1,7 @@
 from pymongo import MongoClient
 from recipeClass import Recipe, Ingredient
-from api import app
-import json
-import requests
+from bson.objectid import ObjectId
+
 
 def connectToDB():
     #client = MongoClient("mongodb://root:root@localhost:27017")
@@ -11,20 +10,28 @@ def connectToDB():
 
     db = client["coockbookdb"]
     recipes_col = db["recipes"]
-    return recipes_col
+    return recipes_col, client
 
+def getRecipe(id):
+    db, client = connectToDB()
+    recipe = db.find_one({"_id": ObjectId(id)})
+    client.close()
+    return recipe
 
+def deleteRecipe(id):
+    db, client = connectToDB()
+    response = db.delete_one({"_id": ObjectId(id)})
+    client.close()
+    return {"message": "Recipe deleted"} if response.deleted_count else {"message": "Recipe not found"}
 
-if __name__ == "__main__":   
-    db = connectToDB()
+def updateRecipe(id, data):
+    db, client = connectToDB()
+    response = db.update_one({"_id": ObjectId(id)}, {'$set': data})
+    client.close()
+    return {"message": "Recipe updated"} if response.modified_count else {"message": "Recipe not found"}
 
-
-    with open('/home/jonro/recipeBook/backend/recipeEx.json', 'r') as file:
-        json_data = json.load(file)
-
-
-    x = db.insert_one(json_data)
-
-    print(x.inserted_id)
-
-    app.run(debug=True)
+def addRecipe(recipe):
+    db, client = connectToDB()
+    recipe_id = db.insert_one(recipe)
+    client.close()
+    return recipe_id

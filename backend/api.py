@@ -22,7 +22,7 @@ def apiPUT():
     return jsonify(response), 200
 
 
-@app.route('/recipes', methods=['GET'])
+@app.route('/recipes/<id>', methods=['GET'])
 def apiGET(id):
     if id:
         recipe = getRecipe(id)

@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
-from server import addRecipe, getRecipe, updateRecipe, deleteRecipe
+from server import addRecipe, getRecipe, updateRecipe, deleteRecipe, searchRecipe
+import json
 
 app = Flask(__name__)
 
@@ -24,16 +25,21 @@ def apiPUT():
 
 @app.route('/recipes/<id>', methods=['GET'])
 def apiGET(id):
-    if id:
-        recipe = getRecipe(id)
-        if recipe:
-            return jsonify(recipe), 200
-        else:
-            return jsonify({"message": "Recipe not found"}), 404
-    if not id:
-        return jsonify({"message": "No recipe id provided"}), 400
+    recipe = getRecipe(id)
+    if recipe:
+        return jsonify(recipe), 200
+    else:
+        return jsonify({"message": "Recipe not found"}), 404
 
-@app.route('/recipes', methods=['DELETE'])
+@app.route('/recipes/search/<search>', methods=['GET'])
+def apiSearch(search):
+    recipe = searchRecipe(search)
+    if recipe:
+        return jsonify(recipe), 200
+    else:
+        return jsonify({"message": "Recipe not found"}), 404
+
+@app.route('/recipes/<id>', methods=['DELETE'])
 def apiDELETE():
     response = deleteRecipe(id)
     return jsonify(response), 200

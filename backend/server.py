@@ -24,11 +24,12 @@ def getRecipe(id):
 
 def getRecipes():
     db_recipe, client = connectToDB()
-    recipes = db_recipe.find({})
+    recipes_cursor = db_recipe.find()
+    recipes_list = list(recipes_cursor)
     client.close()
-    for recipe in recipes:
+    for recipe in recipes_list:
         recipe['_id'] = str(recipe['_id'])
-    return recipes
+    return recipes_list
 
 def deleteRecipe(id):
     db_recipe, client = connectToDB()
@@ -57,7 +58,8 @@ def searchRecipe(search):
         recipe['_id'] = str(recipe['_id'])
     return recipes_list
 
-folder_path = "../recipes"
+
+
 def dump_recipes_as_json():
     db_recipe, client = connectToDB()
     recipes = db_recipe.find({})

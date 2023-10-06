@@ -13,9 +13,8 @@ def apiPUT():
     response = updateRecipe(id, data)
     return jsonify(response), 200
 
-@app.route('/recipes/search/', methods=['GET'])
-def apiSearch():
-    search = request.json
+@app.route('/recipes/search/<search>', methods=['GET'])
+def apiSearch(search):
     recipe = searchRecipe(search)
     if recipe:
         return jsonify(recipe), 200

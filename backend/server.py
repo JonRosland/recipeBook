@@ -24,7 +24,7 @@ def getRecipe(id):
 
 def getRecipes():
     db_recipe, client = connectToDB()
-    recipes = db_recipe.find()
+    recipes = db_recipe.find({})
     client.close()
     for recipe in recipes:
         recipe['_id'] = str(recipe['_id'])
@@ -53,4 +53,19 @@ def searchRecipe(search):
     recipes_cursor = db_recipe.find(search)
     recipes_list = list(recipes_cursor)
     client.close()
+    for recipe in recipes_list:
+        recipe['_id'] = str(recipe['_id'])
     return recipes_list
+
+folder_path = "../recipes"
+def dump_recipes_as_json():
+    db_recipe, client = connectToDB()
+    recipes = db_recipe.find({})
+
+    for recipe in recipes:
+        # Convert ObjectId to string
+        recipe['_id'] = str(recipe['_id'])
+        
+        # Dump the recipe as a JSON file
+        with open(f"recipes/{recipe['_id']}.json", 'w') as file:
+            json.dump(recipe, file, indent=4)

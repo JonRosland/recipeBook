@@ -1,13 +1,12 @@
 from flask import Flask, request, jsonify
-from server import addRecipe, getRecipe, updateRecipe, deleteRecipe, searchRecipe
+from server import addRecipe, getRecipe, updateRecipe, deleteRecipe, searchRecipe, getRecipes
 import json
 
 app = Flask(__name__)
 
 @app.route('/recipes/<id>', methods=['PUT'])
-def apiPUT():
+def apiPUT(id):
     data = request.json
-    print(data)
     if not data:
         return jsonify({"message": "No input data provided"}), 400
     response = updateRecipe(id, data)
@@ -15,7 +14,8 @@ def apiPUT():
 
 @app.route('/recipes/search/<search>', methods=['GET'])
 def apiSearch(search):
-    recipe = searchRecipe(search)
+    search_dict = json.loads(search)
+    recipe = searchRecipe(search_dict)
     if recipe:
         return jsonify(recipe), 200
     else:
@@ -36,6 +36,9 @@ def apiPOST():
 
 @app.route('/recipes/<id>', methods=['GET'])
 def apiGET(id):
+    if not id:
+        recipes = getRecipes()
+        return recipes
     recipe = getRecipe(id)
     if recipe:
         return jsonify(recipe), 200

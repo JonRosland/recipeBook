@@ -1,0 +1,27 @@
+{
+    "_id": "652012731e7f5cbad90fe43b",
+    "recipeName": "meatballs",
+    "origin": "dad",
+    "category": "dinner",
+    "portion": 2,
+    "ingredients": [
+        {
+            "name": "carrot",
+            "quantity": 2,
+            "unit": "kg"
+        },
+        {
+            "name": "potato",
+            "quantity": 2,
+            "unit": "kg"
+        }
+    ],
+    "steps": [
+        "description1",
+        "description2"
+    ],
+    "notes": [
+        "note1",
+        "note2"
+    ]
+}

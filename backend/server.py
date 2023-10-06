@@ -22,15 +22,13 @@ def getRecipe(id):
         recipe['_id'] = str(recipe['_id'])
     return recipe
 
-def searchRecipe(search):
+def getRecipes():
     db_recipe, client = connectToDB()
-    print(search)
-    recipes_cursor = db_recipe.find({"category":"dinner"})
-    print(recipes_cursor)
-    recipes_list = list(recipes_cursor)
-    print(recipes_list)
+    recipes = db_recipe.find()
     client.close()
-    return recipes_list
+    for recipe in recipes:
+        recipe['_id'] = str(recipe['_id'])
+    return recipes
 
 def deleteRecipe(id):
     db_recipe, client = connectToDB()
@@ -49,3 +47,13 @@ def addRecipe(recipe):
     recipe_id = db_recipe.insert_one(recipe)
     client.close()
     return recipe_id
+
+def searchRecipe(search):
+    db_recipe, client = connectToDB()
+    print(search)
+    recipes_cursor = db_recipe.find(search)
+    print(recipes_cursor)
+    recipes_list = list(recipes_cursor)
+    print(recipes_list)
+    client.close()
+    return recipes_list

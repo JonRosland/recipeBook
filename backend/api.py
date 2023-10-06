@@ -5,7 +5,7 @@ import json
 app = Flask(__name__)
 
 
-@app.route('/recipes', methods=['POST'])
+@app.route('/recipes/<data>', methods=['POST'])
 def apiPOST():
     data = request.json
     if not data:
@@ -17,6 +17,7 @@ def apiPOST():
 @app.route('/recipes/<id>', methods=['PUT'])
 def apiPUT():
     data = request.json
+    print(data)
     if not data:
         return jsonify({"message": "No input data provided"}), 400
     response = updateRecipe(id, data)

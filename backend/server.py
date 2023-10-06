@@ -50,10 +50,7 @@ def addRecipe(recipe):
 
 def searchRecipe(search):
     db_recipe, client = connectToDB()
-    print(search)
     recipes_cursor = db_recipe.find(search)
-    print(recipes_cursor)
     recipes_list = list(recipes_cursor)
-    print(recipes_list)
     client.close()
     return recipes_list

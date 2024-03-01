@@ -1,0 +1,31 @@
+# General
+.git
+.gitignore
+.dockerignore
+Dockerfile
+README.md
+.vscode
+*.md
+mongodb/
+
+# Python backend ignores
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+venv
+env
+
+# Miscellaneous files
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.orig

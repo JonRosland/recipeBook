@@ -1,0 +1,27 @@
+{
+    "recipeName": "Meatballs",
+    "origin": "Mom",
+    "category": "Dinner",
+    "portion": 2,
+    "region": "Asiatisk",
+    "ingredients": [
+        {
+            "name": "Carrot",
+            "quantity": 2,
+            "unit": "kg"
+        },
+        {
+            "name": "Potato",
+            "quantity": 2,
+            "unit": "kg"
+        }
+    ],
+    "steps": [
+        "description1",
+        "description2"
+    ],
+    "notes": [
+        "note1",
+        "note2"
+    ]
+}

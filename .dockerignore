@@ -1,0 +1,45 @@
+# General
+.git
+.gitignore
+.dockerignore
+Dockerfile
+README.md
+.vscode
+*.md
+mongodb/
+
+# Python backend ignores
+backend/__pycache__
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+backend/.pytest_cache
+backend/venv
+backend/env
+
+# Node frontend ignores
+frontend/node_modules
+frontend/dist
+frontend/.astro
+frontend/.svelte
+frontend/.vite
+frontend/.vscode
+frontend/npm-debug.log
+frontend/yarn-error.log
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Miscellaneous files
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.orig

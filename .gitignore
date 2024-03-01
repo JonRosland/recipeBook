@@ -1,0 +1,5 @@
+mongodb/*
+
+backend/__pycache__/*
+
+.git/objects/*

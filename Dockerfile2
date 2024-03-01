@@ -1,0 +1,19 @@
+# Frontend build stage
+
+FROM alpine:latest
+WORKDIR /app
+COPY frontend/ frontend/
+COPY backend/ backend/
+RUN apk add --no-cache nodejs npm python3 py3-pip 
+RUN pwd 
+RUN ls backend
+RUN pip3 install -r backend/requirements.txt --break-system-packages
+RUN cd frontend && npm install && npm run build
+
+ENV HOST=0.0.0.0
+ENV PORT=4321
+EXPOSE 4321
+
+RUN pwd
+# Correct the CMD to run both services, as discussed previously
+CMD sh -c "python3 /app/backend/main.py & node /app/frontend/dist/server/entry.mjs"

@@ -19,6 +19,6 @@
     "mongoose": "^8.1.1",
     "nanostores": "^0.9.5",
     "node-fetch": "^3.3.2",
-    "svelte": "^4.2.9"
+    "svelte": "^4.2.10"
   }
 }

@@ -22,6 +22,31 @@ const { title } = Astro.props;
 	</body>
 </html>
 
+<style is:global>
+		:root {
+/* Define the primary and fallback fonts for body text and monospaced elements */
+--font-body: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+	Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+--font-mono: 'Fira Mono', monospace;
+
+/*Define a color palette for backgrounds, themes, and text */
+--bg-color-0: rgb(255, 185, 185);
+--bg-color-0-muted: rgb(128, 128, 128);
+--color-theme-1: #ff9e7d;
+--text-color: rgba(0, 0, 0, 0.7);
+--text-color-h: rgb(0, 0, 0);
+
+/* Layout dimensions for maintaining consistency */
+--column-width: 42rem;
+/* Max width for text columns */
+--column-margin-top: 4rem;
+/* Top margin for columns */
+
+/* Global font and color settings */
+font-family: var(--font-body);
+color: var(--color-text);
+		}
+</style>
 <!--
 <style is:global>
 	:root {

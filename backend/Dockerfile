@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.8-slim as builder
+FROM python:3.8-slim AS builder
 # Set the working directory in the container
 WORKDIR /app
 # Copy the current directory contents into the container at /app

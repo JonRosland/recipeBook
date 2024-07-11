@@ -1,45 +1,49 @@
-# Frontend build stage
-FROM node:lts AS frontend-builder
-WORKDIR /app/frontend
-COPY frontend/ . 
-RUN npm install && npm run build
-
-# Backend build stage
+# Stage 1: Build Backend
 FROM python:3.8-slim AS backend-builder
 WORKDIR /app/backend
-#COPY backend/requirements.txt . 
-COPY backend/ .
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-#COPY backend/ .
+COPY backend .
 
-FROM alpine:latest
+# Stage 2: Build Frontend
+FROM node:lts AS frontend-builder
+WORKDIR /app/frontend
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm install
+COPY frontend .
+RUN npm run build
+
+# Stage 3: Production Image
+FROM python:3.8-slim AS runtime
+
+# Install Node.js to run the frontend
+RUN apt-get update && apt-get install -y nodejs npm && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Install Node.js, npm, Python, pip, and any other system dependencies
-RUN apk update
-RUN apk add --no-cache nodejs npm python3 py3-pip 
-# If there are specific build tools needed for npm packages, install them here
-# For example, apk add --no-cache make g++ for packages that require native build tools
-
-# Copy the built frontend and backend artifacts from their respective builder stages
-COPY --from=frontend-builder /app/frontend/dist /app/frontend/dist
-COPY /frontend/package.json /app/frontend
+# Copy backend from the backend-builder stage
 COPY --from=backend-builder /app/backend /app/backend
 
-# Install Python and Node.js dependencies
-#RUN python3 -m venv ~/pyvenv --system-site-packages
-#RUN ~/pyvenv/bin/pip3 install -r /app/backend/requirements.txt
+# Ensure the Python dependencies are included
+COPY --from=backend-builder /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
 
-RUN pip3 install -r /app/backend/requirements.txt --break-system-packages
-# Ensure you're in the right directory to run npm install for frontend dependencies
-RUN pwd
-RUN ls
-RUN cd frontend/ && npm install 
-RUN cd ..
-RUN pwd
-# Set any environment variables
-ENV HOST=0.0.0.0
-ENV PORT=4321
+# Copy frontend build output from the frontend-builder stage
+COPY --from=frontend-builder /app/frontend /app/frontend
+
+# Install only production dependencies for the frontend
+WORKDIR /app/frontend
+RUN npm install --production
+
+# Set up the environment variables
+ENV BACKEND_HOST=0.0.0.0
+ENV BACKEND_PORT=4000
+ENV FRONTEND_HOST=0.0.0.0
+ENV FRONTEND_PORT=4321
+
+# Expose the ports
+EXPOSE 4000
 EXPOSE 4321
-# Correct the CMD to run both services, as discussed previously
-CMD sh -c "python3 /app/backend/main.py & node /app/frontend/dist/server/entry.mjs"
+
+# Define the command to run both backend and frontend
+WORKDIR /app
+CMD ["sh", "-c", "python3 /app/backend/main.py & node /app/frontend/dist/server/entry.mjs"]

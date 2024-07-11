@@ -56,6 +56,19 @@ services:
     networks:
       - mongonet
 
+#  recipe-book:
+#    container_name: recipe-book
+#    image: user/recipe-book:v1.0
+#    #build:
+#    #  context: .
+#    #  dockerfile: Dockerfile
+#    ports:
+#      - '4000:4000'
+#      - '4321:4321'
+#    stop_signal: SIGINT
+#    networks:
+#      - mongonet
+
 networks:
   mongonet:
     name: mongonet

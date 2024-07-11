@@ -14,7 +14,7 @@
 #EXPOSE $APP_PORT
 #ENTRYPOINT [ "node" ]
 #CMD ["dist/server/entry.mjs"]
-FROM node:lts AS base
+FROM node:22.4.1-bookworm-slim AS base
 WORKDIR /app
 
 # By copying only the package.json and package-lock.json here, we ensure that the following `-deps` steps are independent of the source code.

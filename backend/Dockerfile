@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.8-slim AS builder
+FROM python:3.12-bookworm AS builder
 # Set the working directory in the container
 WORKDIR /app
 # Copy the current directory contents into the container at /app
@@ -14,7 +14,5 @@ COPY . /app
 #EXPOSE 4000
 # Run main.py when the container launcher
 #ENV HOST=172.17.67.237
-ENV HOST=0.0.0.0
-ENV PORT=4000
 ENTRYPOINT ["python3"]
 CMD ["main.py"]

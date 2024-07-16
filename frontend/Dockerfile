@@ -1,41 +1,29 @@
-#FROM node:lts AS builder
-#ARG APP_IP
-#ARG APP_PORT
-#
-#WORKDIR /app
-#
-#COPY . .
-#
-#RUN npm install
-#RUN npm run build
-#
-#ENV HOST=0.0.0.0
-#ENV PORT=4321
-#EXPOSE $APP_PORT
-#ENTRYPOINT [ "node" ]
-#CMD ["dist/server/entry.mjs"]
-FROM node:lts AS base
+# Use the official Node.js image as the base image for building the project
+FROM node:18-alpine AS build
+
 WORKDIR /app
 
-# By copying only the package.json and package-lock.json here, we ensure that the following `-deps` steps are independent of the source code.
-# Therefore, the `-deps` steps will be skipped if only the source code changes.
+# Copy package.json and package-lock.json to install dependencies
 COPY package.json package-lock.json ./
 
-FROM base AS prod-deps
-RUN npm install --production
+# Install npm dependencies
+RUN npm install --legacy-peer-deps
 
-FROM base AS build-deps
-RUN npm install --production=false
-
-FROM build-deps AS build
+# Copy the rest of the project files
 COPY . .
+
+# Build the Astro project
 RUN npm run build
 
-FROM base AS runtime
-COPY --from=prod-deps /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
+# Use the official Deno image as the base image for running the project
+FROM denoland/deno:alpine-1.45.2 AS runtime
 
-ENV HOST=0.0.0.0
-ENV PORT=4321
-EXPOSE 4321
-CMD node ./dist/server/entry.mjs
+EXPOSE 8085
+
+WORKDIR /app
+
+# Copy the built project files from the build stage
+COPY --from=build /app/dist /app/dist
+
+# Run the server with necessary permissions
+CMD ["deno", "run", "--allow-net", "--allow-read", "--allow-env", "./dist/server/entry.mjs"]

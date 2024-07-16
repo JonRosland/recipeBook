@@ -1,13 +1,10 @@
 import { defineConfig } from 'astro/config';
-import svelte from "@astrojs/svelte";
+import svelte from '@astrojs/svelte';
+import deno from "@astrojs/deno";
+//import deno from "deno-astro-adapter";
 
-import node from "@astrojs/node";
-
-// https://astro.build/config
 export default defineConfig({
-  integrations: [svelte()],
-  output: "server",
-  adapter: node({
-    mode: "standalone"
-  })
+    integrations: [svelte(), deno()],
+    output: 'server',
+    adapter: deno(),
 });

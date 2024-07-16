@@ -34,11 +34,6 @@ COPY --from=frontend-builder /app/frontend /app/frontend
 WORKDIR /app/frontend
 RUN npm install --production
 
-# Set up the environment variables
-ENV BACKEND_HOST=0.0.0.0
-ENV BACKEND_PORT=4000
-ENV FRONTEND_HOST=0.0.0.0
-ENV FRONTEND_PORT=4321
 
 # Expose the ports
 EXPOSE 4000

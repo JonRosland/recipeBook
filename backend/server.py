@@ -1,10 +1,16 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 import json
+import os
 
 def connectToDB():
+    db_host = os.getenv('DB_HOST', 'localhost')  # default to 'localhost' if not set
+    db_port = int(os.getenv('DB_PORT', 27017))   # default to 27017 if not set
+    db_user = os.getenv('DB_USER', 'root')       # default to 'root' if not set
+    db_pass = os.getenv('DB_PASS', 'root')       # default to 'root' if not set
     #client = MongoClient("mongodb://root:root@mongo:27017/")
-    client = MongoClient('10.0.0.21', 27017, username='root', password='root')
+    client = MongoClient(db_host, db_port, username=db_user, password=db_pass)
+    #client = MongoClient('10.0.0.21', 27017, username='root', password='root') 
     #client = MongoClient('mongo', 27017, username='root', password='root')
     #client.server_info()
     db = client["RecipeDB"]

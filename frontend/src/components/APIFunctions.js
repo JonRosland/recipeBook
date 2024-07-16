@@ -1,6 +1,6 @@
 //const IP = process.env.APP_IP || 'localhost';
 //const baseUrl = 'http://' + IP + ':4000/api/';
-const baseUrl = 'http://10.0.0.21:4000/api/';
+const baseUrl = 'http://10.0.0.20:6088/api/';
 
 export async function getRecipeApi(id) {
     try {

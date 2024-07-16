@@ -7,4 +7,4 @@ if __name__ == "__main__":
     #with open('/home/wallee/recipeBook/backend/recipeEx.json', 'r') as file:
     #    json_data = json.load(file)
     #x = db.insert_one(json_data)
-    app.run(debug=True, port=4000, host='0.0.0.0')
+    app.run(debug=True, port=6088, host='0.0.0.0')

@@ -31,31 +31,49 @@ services:
     networks:
       - mongonet
 
-  backend:
-    container_name: backend
-    build:
-      context: backend
-      target: builder
+  #  backend:
+  #    container_name: backend
+  #    image: jonro/recipebook:backend
+  #    ports:
+  #      - '6088:6088'
+  #    stop_signal: SIGINT
+  #    environment:
+  #      DB_HOST: 10.0.0.21
+  #      DB_PORT: 27017
+  #      DB_USER: root
+  #      DB_PASS: root
+  #    networks:
+  #      - mongonet
+
+  #  backend:
+  #    container_name: backend
+  #    build:
+  #      context: backend
+  #      target: builder
+  #    ports:
+  #      - '4000:4000'
+  #    stop_signal: SIGINT
+  #    networks:
+  #      - mongonet
+  #    #depends_on:
+  #    #  - mongo
+
+  #  frontend:
+  #    container_name: frontend
+  #    build:
+  #      context: frontend
+  #    ports:
+  #      - '4321:4321'
+  #    networks:
+  #      - mongonet
+  frontend:
+    container_name: frontend
+    image: jonro/recipebook:frontend
     ports:
-      - '4000:4000'
+      - '8085:8085'
     stop_signal: SIGINT
     networks:
       - mongonet
-    #depends_on:
-    #  - mongo
-  frontend:
-    container_name: frontend
-    build:
-      context: frontend
-      #target: builder
-      #args:
-      #  - APP_IP=backend
-      #  - APP_PORT=4000
-    ports:
-      - '4321:4321'
-    networks:
-      - mongonet
-
 #  recipe-book:
 #    container_name: recipe-book
 #    image: user/recipe-book:v1.0
@@ -70,6 +88,44 @@ services:
 #      - mongonet
 
 networks:
+  #  traefik-proxy:
+  #    external: true
   mongonet:
     name: mongonet
     driver: bridge
+
+#  traefik:
+#    image: traefik:latest
+#    container_name: traefik
+#    restart: unless-stopped
+#    security_opt:
+#      - no-new-privileges:true
+#    networks:
+#      - traefik-proxy
+#    ports:
+#      - 80:80
+#      - 443:443
+#      - 8080:8080 # (Optional) Enable Dashboard, don't do in production
+#      # - 443:443/tcp # Uncomment if you want HTTP3
+#      # - 443:443/udp # Uncomment if you want HTTP3
+#    environment:
+#      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN} # if using .env
+#    #  TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
+#    #env_file: .env # use .env
+#    volumes:
+#      - /etc/localtime:/etc/localtime:ro
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#      - ~/config/traefik/traefik.yaml:/traefik.yaml:ro
+#      - ~/config/traefik/acme.json:/acme.json
+#      #- ~/config/certs/:/etc/traefik/certs/
+#      - ~/config/traefik/config.yaml:/config.yaml:ro
+#    labels:
+#      - traefik.enable=true
+#      - traefik.http.routers.mydashboard.rule=Host(`traefik.riceemperor.com`)
+#      - "traefik.http.routers.mydashboard.entrypoints=https"
+#      - traefik.http.routers.mydashboard.service=api@internal
+#      - "traefik.http.routers.homarr.tls=true"
+#      - traefik.http.routers.mydashboard.middlewares=myauth
+#      - traefik.http.middlewares.myauth.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/
+#      
+#    https://technotim.live/posts/traefik-3-docker-certificates/

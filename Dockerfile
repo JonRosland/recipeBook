@@ -1,5 +1,5 @@
 # Stage 1: Build Backend
-FROM python:3.8-slim AS backend-builder
+FROM python:3.13.2-slim AS backend-builder
 WORKDIR /app/backend
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -14,7 +14,7 @@ COPY frontend .
 RUN npm run build
 
 # Stage 3: Production Image
-FROM python:3.8-slim AS runtime
+FROM python:3.13.2-slim AS runtime
 
 # Install Node.js to run the frontend
 RUN apt-get update && apt-get install -y nodejs npm && rm -rf /var/lib/apt/lists/*

@@ -1,4 +1,5 @@
 <script>
+    export let location = "";
     const discordWebhookURL =
         "https://discord.com/api/webhooks/1212389938675322891/chtRaCXZOCucbbB4a5i2EwsU7HtUe2kPAwcUmPAEqAjkJXVA9DoTLxmXN2YHZezLOvKn";
 
@@ -6,7 +7,7 @@
     async function postComment() {
         console.log("Posting comment:", description);
         const comment = {
-            content: description,
+            content: location + ": " + description,
         };
         try {
             const response = await fetch(discordWebhookURL, {

@@ -17,7 +17,7 @@ const { id } = Astro.params;
         <ViewOne title="Porsjoner" element="portion" client:load />
         <ViewOne title="Kategori" element="category" client:load />
         <ViewOne title="Region" element="region" client:load />
-        <Manipulation id={id} client:load />
+        <Manipulation id={id} client:load locationn="editRecipe" />
     </div>
 </Layout>
 

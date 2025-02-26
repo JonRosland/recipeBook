@@ -4,6 +4,8 @@
     "category": "Dinner",
     "portion": 2,
     "region": "Asiatisk",
+    "time": 10,
+    "favorite": true,
     "ingredients": [
         {
             "name": "Carrot",

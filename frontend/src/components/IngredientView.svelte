@@ -22,7 +22,7 @@
 
 <section class="ingredients">
     <h4>
-        Porsjoner: {portionModifier + recipe.portion}
+        Porsjoner: {+portionModifier + +recipe.portion}
         <button
             on:click={handleMinus}
             style="border: 2px solid black; padding: 5px 10px;">-</button
@@ -38,7 +38,7 @@
             {#each recipe.ingredients as ingredient}
                 <li>
                     {ingredient.name}
-                    {ingredient.quantity * (portionModifier + recipe.portion)}
+                    {ingredient.quantity * (+portionModifier + +recipe.portion)}
                     {ingredient.unit}
                 </li>
             {/each}

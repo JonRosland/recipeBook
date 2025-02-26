@@ -1,4 +1,3 @@
-version: '3.1'
 services:
   mongo:
     image: mongo:latest
@@ -72,8 +71,8 @@ services:
     ports:
       - '8085:8085'
     stop_signal: SIGINT
-    networks:
-      - mongonet
+#    networks:
+#      - mongonet
 #  recipe-book:
 #    container_name: recipe-book
 #    image: user/recipe-book:v1.0
@@ -93,39 +92,3 @@ networks:
   mongonet:
     name: mongonet
     driver: bridge
-
-#  traefik:
-#    image: traefik:latest
-#    container_name: traefik
-#    restart: unless-stopped
-#    security_opt:
-#      - no-new-privileges:true
-#    networks:
-#      - traefik-proxy
-#    ports:
-#      - 80:80
-#      - 443:443
-#      - 8080:8080 # (Optional) Enable Dashboard, don't do in production
-#      # - 443:443/tcp # Uncomment if you want HTTP3
-#      # - 443:443/udp # Uncomment if you want HTTP3
-#    environment:
-#      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN} # if using .env
-#    #  TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
-#    #env_file: .env # use .env
-#    volumes:
-#      - /etc/localtime:/etc/localtime:ro
-#      - /var/run/docker.sock:/var/run/docker.sock:ro
-#      - ~/config/traefik/traefik.yaml:/traefik.yaml:ro
-#      - ~/config/traefik/acme.json:/acme.json
-#      #- ~/config/certs/:/etc/traefik/certs/
-#      - ~/config/traefik/config.yaml:/config.yaml:ro
-#    labels:
-#      - traefik.enable=true
-#      - traefik.http.routers.mydashboard.rule=Host(`traefik.riceemperor.com`)
-#      - "traefik.http.routers.mydashboard.entrypoints=https"
-#      - traefik.http.routers.mydashboard.service=api@internal
-#      - "traefik.http.routers.homarr.tls=true"
-#      - traefik.http.routers.mydashboard.middlewares=myauth
-#      - traefik.http.middlewares.myauth.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/
-#      
-#    https://technotim.live/posts/traefik-3-docker-certificates/

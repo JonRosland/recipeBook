@@ -13,6 +13,8 @@
     } from "../../stores/recipeStore.js";
 
     export let id = "";
+    export let locationn = "";
+
     let newRecipe = {
         recipeName: "Oppskrift Navn",
         origin: "Feks Mor",
@@ -68,5 +70,5 @@
             label="Tilbake til {editRecipe.recipeName}"
             onClick={backToRecipe}
         />{/if}
-    <Improvement client:load />
+    <Improvement client:load location={locationn} />
 </div>

@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import IngredientView from "../../components/IngredientView.svelte";
 import { getRecipeApi } from "../../components/APIFunctions.js";
 import Improvement from "../../components/Improvement.svelte";
+
 const { id } = Astro.params;
 
 let recipe = {
@@ -23,16 +24,16 @@ recipe = await getRecipeApi(id);
   <div class="content">
     <section class="title textLeft">
       <div class="origin">
-        <h2>Opphav: {recipe.origin}</h2>
-        <h2>Kategori: {recipe.category}</h2>
-        <h2>Region: {recipe.region}</h2>
+        <p>Opphav: {recipe.origin}</p>
+        <p>Kategori: {recipe.category}</p>
+        <p>Region: {recipe.region}</p>
       </div>
       <div class="recipeName">
         <h1>{recipe.recipeName}</h1>
       </div>
       <div class="edit">
-        <a href={"/"}> Alle oppskrifter</a>
-        <a href={"/edit/" + id}> Rediger oppskrift</a>
+        <a href="/">Alle oppskrifter</a>
+        <a href={`/edit/${id}`}>Rediger oppskrift</a>
       </div>
     </section>
     <IngredientView recipe={recipe} client:load />
@@ -47,14 +48,14 @@ recipe = await getRecipeApi(id);
 
     <section class="method">
       <h3>Fremgangsmåte</h3>
-      <div class="lextLeft">
+      <div class="textLeft">
         <ol>
           {recipe.steps.map((step) => <li>{step}</li>)}
         </ol>
       </div>
     </section>
   </div>
-  <Improvement client:load />
+  <Improvement client:load location="recipeView" />
 </Layout>
 
 <style>
@@ -85,26 +86,22 @@ recipe = await getRecipeApi(id);
     text-align: center;
     grid-area: rn;
   }
+  .origin {
+    grid-area: o;
+  }
+  .edit {
+    text-align: right;
+    grid-area: e;
+  }
 
   .ingredients {
     grid-area: i;
   }
-
   .notes {
     grid-area: n;
   }
-
   .method {
     grid-area: m;
-  }
-
-  .origin {
-    grid-area: o;
-  }
-
-  .edit {
-    text-align: right;
-    grid-area: e;
   }
 
   section {
@@ -121,5 +118,39 @@ recipe = await getRecipeApi(id);
 
   .textLeft {
     text-align: left;
+  }
+
+  @media (max-width: 700px) {
+    .content {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "t"
+        "n"
+        "i"
+        "m";
+    }
+    .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .origin,
+    .edit {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .recipeName {
+      margin: 20px 0;
+    }
+
+    .edit a {
+      margin: 0 10px;
+    }
   }
 </style>

@@ -23,36 +23,29 @@ const { title } = Astro.props;
 </html>
 
 <style is:global>
-	:root {
-		--primary-color: #55a7ac;
-		--text-light: #ffffff;
-		--text-dark: #000000;
-		--card-radius: 24px;
-		--default-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-			Ubuntu, "Helvetica Neue", sans-serif;
-	}
+		:root {
+/* Define the primary and fallback fonts for body text and monospaced elements */
+--font-body: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+	Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+--font-mono: 'Fira Mono', monospace;
 
-	* {
-		box-sizing: border-box;
-		margin: 0;
-		padding: 0;
-	}
+/*Define a color palette for backgrounds, themes, and text */
+--bg-color-0: rgb(255, 185, 185);
+--bg-color-0-muted: rgb(128, 128, 128);
+--color-theme-1: #ff9e7d;
+--text-color: rgba(0, 0, 0, 0.7);
+--text-color-h: rgb(0, 0, 0);
 
-	body {
-		font-family: var(--default-font);
-		background-color: #ffffff;
-		color: var(--text-dark);
-		line-height: 1.5;
-	}
+/* Layout dimensions for maintaining consistency */
+--column-width: 42rem;
+/* Max width for text columns */
+--column-margin-top: 4rem;
+/* Top margin for columns */
 
-	button {
-		cursor: pointer;
-	}
-
-	a {
-		color: inherit;
-		text-decoration: none;
-	}
+/* Global font and color settings */
+font-family: var(--font-body);
+color: var(--color-text);
+		}
 </style>
 <!--
 <style is:global>

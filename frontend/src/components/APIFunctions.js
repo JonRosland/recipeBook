@@ -1,81 +1,62 @@
-//const IP = process.env.APP_IP || 'localhost';
-//const baseUrl = 'http://' + IP + ':4000/api/';
+// APIFunctions.js - Centralized API functions
 const baseUrl = 'http://10.0.0.20:6088/api/'; // for development
-//const baseUrl = 'https://recipebook.riceemperor.com/api/';
+// const baseUrl = 'https://recipebook.riceemperor.com/api/';
 
-export async function getRecipeApi(id) {
+// Helper function to handle common fetch operations
+async function fetchWithErrorHandling(url, options = {}) {
     try {
-        const response = await fetch(baseUrl + id);
+        const response = await fetch(url, options);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
         return await response.json();
     } catch (error) {
-        console.error("Error fetching recipe:", error);
+        console.error(`API Error (${url}):`, error);
         throw error;
     }
 }
 
-export async function getRecipesApi() {
-    try {
-        const response = await fetch(baseUrl);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("Error fetching recipe:", error);
-        throw error;
-    }
+// Get a single recipe by ID
+export function getRecipeApi(id) {
+    return fetchWithErrorHandling(baseUrl + id);
 }
 
-export async function updateRecipeApi(id, recipe) {
-    try {
-        const response = await fetch(baseUrl + id, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(recipe),
-        });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("Error updating recipe:", error);
-        throw error;
-    }
+// Get all recipes
+export function getRecipesApi() {
+    return fetchWithErrorHandling(baseUrl);
 }
 
-export async function postRecipeApi(recipe) {
-    try {
-        const response = await fetch(baseUrl + 'newRecipe', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(recipe),
-        });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("Error creating new recipe:", error);
-        throw error;
-    }
+// Update a recipe
+export function updateRecipeApi(id, recipe) {
+    return fetchWithErrorHandling(baseUrl + id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(recipe)
+    });
 }
 
-export async function searchRecipeApi(search) {
-    try {
-        const response = await fetch(baseUrl + 'search/' + search);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("Error fetching recipe:", error);
-        throw error;
-    }
+// Create a new recipe
+export function postRecipeApi(recipe) {
+    return fetchWithErrorHandling(baseUrl + 'newRecipe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(recipe)
+    });
+}
+
+// Search for recipes
+export function searchRecipeApi(search) {
+    return fetchWithErrorHandling(baseUrl + 'search/' + search);
+}
+
+// Toggle favorite status (uses updateRecipeApi)
+export async function toggleFavoriteApi(id, favoriteStatus) {
+    // First get the current recipe
+    const recipe = await getRecipeApi(id);
+
+    // Then update only the favorite field
+    recipe.favorite = favoriteStatus;
+
+    // Send the update
+    return updateRecipeApi(id, recipe);
 }

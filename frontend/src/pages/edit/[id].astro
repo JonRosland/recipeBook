@@ -1,94 +1,520 @@
----
-import Layout from "../../layouts/Layout.astro";
-import ViewList from "../../components/edit/ViewList.svelte";
-import ViewOne from "../../components/edit/ViewOne.svelte";
-import Manipulation from "../../components/edit/Manipulation.svelte";
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Create New Recipe</title>
+    </head>
+    <body>
+        <header class="recipe-header">
+            <button class="back-button" aria-label="Go back">
+                <svg class="back-icon" viewBox="0 0 24 24">
+                    <path d="M15 6l-6 6 6 6"></path>
+                </svg>
+            </button>
+            <h1 class="recipe-title">Ny opskrift</h1>
+            <button class="favorite-button" aria-label="Add to favorites">
+                <svg class="star-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                    ></path>
+                </svg>
+            </button>
+        </header>
 
-const { id } = Astro.params;
----
+        <!-- Information Section -->
+        <section class="section-card">
+            <h3 class="section-title">Informasjon</h3>
 
-<Layout title={"Rediger oppskrift"}>
-    <div class="content">
-        <ViewList title="Ingredienser" element="ingredients" client:load />
-        <ViewList title="Fremgangsmåte" element="steps" client:load />
-        <ViewList title="Notater" element="notes" client:load />
-        <ViewOne title="Opphav" element="origin" client:load />
-        <ViewOne title="Name" element="recipeName" client:load />
-        <ViewOne title="Porsjoner" element="portion" client:load />
-        <ViewOne title="Kategori" element="category" client:load />
-        <ViewOne title="Region" element="region" client:load />
-        <Manipulation id={id} client:load locationn="editRecipe" />
-    </div>
-</Layout>
+            <div class="form-row">
+                <input
+                    type="text"
+                    class="input-field"
+                    placeholder="legg til Opphav"
+                />
+                <button class="btn">Legg til Opphav</button>
+            </div>
 
+            <div class="form-row">
+                <input
+                    type="text"
+                    class="input-field"
+                    placeholder="legg til Navn"
+                />
+                <button class="btn">Legg til Navn</button>
+            </div>
+
+            <div class="form-row">
+                <input
+                    type="text"
+                    class="input-field"
+                    placeholder="legg til Porsjoner"
+                />
+                <button class="btn">Legg til porsjoner</button>
+            </div>
+
+            <div class="form-row">
+                <select class="dropdown">
+                    <option>Kategori</option>
+                    <option>Middag</option>
+                    <option>Dessert</option>
+                    <option>Suppe</option>
+                    <option>Bakst</option>
+                </select>
+
+                <select class="dropdown">
+                    <option>Region</option>
+                    <option>Asia</option>
+                    <option>Italia</option>
+                    <option>Frankrike</option>
+                    <option>Norge</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Ingredients Section -->
+        <section class="section-card">
+            <h3 class="section-title">Ingredienser</h3>
+
+            <div class="form-row">
+                <input
+                    type="text"
+                    class="input-field"
+                    placeholder="Ingrediens"
+                />
+            </div>
+
+            <div class="form-row ingredient-row">
+                <input
+                    type="text"
+                    class="input-field ingredient-quantity"
+                    placeholder="Mengde"
+                />
+                <input
+                    type="text"
+                    class="input-field ingredient-unit"
+                    placeholder="Enhet"
+                />
+                <button class="btn">Legg til Ingrediens</button>
+            </div>
+
+            <div class="item-list">
+                <div class="list-item">
+                    <div class="list-bullet">•</div>
+                    <div class="list-item-content">vann</div>
+                    <div class="action-buttons">
+                        <button class="action-btn" aria-label="Move down">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <button class="action-btn" aria-label="Move up">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                        </button>
+                        <button class="action-btn" aria-label="Delete">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"
+                                ></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-bullet">•</div>
+                    <div class="list-item-content">vann</div>
+                    <div class="action-buttons">
+                        <button class="action-btn" aria-label="Move down">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <button class="action-btn" aria-label="Move up">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                        </button>
+                        <button class="action-btn" aria-label="Delete">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"
+                                ></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Procedure Section -->
+        <section class="section-card">
+            <h3 class="section-title">Fremgangsmåte</h3>
+
+            <div class="form-row">
+                <input
+                    type="text"
+                    class="input-field"
+                    placeholder="Fremgangsmåte"
+                />
+                <button class="btn">Legg til Fremgangsmåte</button>
+            </div>
+
+            <div class="item-list">
+                <div class="list-item">
+                    <div class="list-bullet">•</div>
+                    <div class="list-item-content">
+                        bland vann med mel å gjør noe gøy. etter bak i ovnen i
+                        40 min bland vann med mel å gjør noe gøy. etter bak i
+                        ovnen i 40 min
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn" aria-label="Move down">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <button class="action-btn" aria-label="Move up">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                        </button>
+                        <button class="action-btn" aria-label="Delete">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"
+                                ></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-bullet">•</div>
+                    <div class="list-item-content">vann</div>
+                    <div class="action-buttons">
+                        <button class="action-btn" aria-label="Move down">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <button class="action-btn" aria-label="Move up">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                        </button>
+                        <button class="action-btn" aria-label="Delete">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"
+                                ></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notes Section -->
+        <section class="section-card">
+            <h3 class="section-title">Notat</h3>
+
+            <div class="form-row">
+                <input type="text" class="input-field" placeholder="Notat" />
+                <button class="btn">Legg til Notat</button>
+            </div>
+
+            <div class="item-list">
+                <div class="list-item">
+                    <div class="list-bullet">•</div>
+                    <div class="list-item-content">
+                        dette er en veldig god middagdette er en veldig god
+                        middagdette er en veldig god middag
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn" aria-label="Move down">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <button class="action-btn" aria-label="Move up">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                        </button>
+                        <button class="action-btn" aria-label="Delete">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"
+                                ></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div class="list-bullet">•</div>
+                    <div class="list-item-content">diggg</div>
+                    <div class="action-buttons">
+                        <button class="action-btn" aria-label="Move down">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <button class="action-btn" aria-label="Move up">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                        </button>
+                        <button class="action-btn" aria-label="Delete">
+                            <svg class="action-icon" viewBox="0 0 24 24">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"
+                                ></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Save Button -->
+        <button class="save-button" aria-label="Save recipe">
+            <svg class="save-icon" viewBox="0 0 24 24">
+                <path
+                    d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"
+                ></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+        </button>
+    </body>
+</html>
 <style>
-    .content {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-auto-rows: minmax(100px, auto);
-        grid-template-areas:
-            "ingredient steps notes"
-            "origin recipeName portion"
-            "category regionn save";
+    :root {
+        --primary-color: #55a7ac;
+        --text-dark: #333333;
+        --text-light: #666666;
+        --background-color: #f7f7f7;
+        --card-background: #ffffff;
+        --input-background: #e0e0e0;
+        --default-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            Ubuntu, "Helvetica Neue", sans-serif;
     }
 
-    .ingredients {
-        grid-area: ingredient;
-    }
-
-    .steps {
-        grid-area: steps;
-    }
-
-    .notes {
-        grid-area: notes;
-    }
-
-    .origin {
-        grid-area: origin;
-    }
-
-    .recipeName {
-        grid-area: recipeName;
-    }
-
-    .portion {
-        grid-area: portion;
-    }
-
-    .category {
-        grid-area: category;
-    }
-
-    .region {
-        grid-area: regionn;
-    }
-
-    .save {
-        grid-area: save;
-    }
-
-    .textLeft {
-        text-align: left;
-    }
-
-    ul {
-        list-style: none;
+    * {
+        box-sizing: border-box;
+        margin: 0;
         padding: 0;
     }
-    @media (max-width: 768px) {
-        .content {
-            grid-template-columns: 1fr;
-            grid-template-areas:
-                "ingredient"
-                "steps"
-                "notes"
-                "origin"
-                "recipeName"
-                "portion"
-                "category"
-                "regionn"
-                "save";
-        }
+
+    body {
+        font-family: var(--default-font);
+        background-color: var(--background-color);
+        color: var(--text-dark);
+        line-height: 1.5;
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .recipe-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 10px 0;
+    }
+
+    .recipe-title {
+        color: var(--primary-color);
+        font-size: 36px;
+        font-weight: 500;
+        text-align: center;
+        flex-grow: 1;
+    }
+
+    .back-button,
+    .favorite-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+    }
+
+    .back-icon,
+    .star-icon {
+        width: 32px;
+        height: 32px;
+        stroke: #2c4658;
+        stroke-width: 2;
+        fill: none;
+    }
+
+    .section-card {
+        background-color: var(--card-background);
+        border-radius: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        padding: 25px;
+        margin-bottom: 25px;
+    }
+
+    .section-title {
+        color: var(--primary-color);
+        font-size: 28px;
+        margin-bottom: 20px;
+        font-weight: 500;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+        align-items: stretch;
+    }
+
+    .input-field {
+        background-color: var(--input-background);
+        border: none;
+        border-radius: 10px;
+        padding: 12px 15px;
+        font-size: 16px;
+        flex-grow: 1;
+        height: 45px;
+    }
+
+    .input-field::placeholder {
+        color: #666;
+    }
+
+    .btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 15px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        height: 45px;
+        width: 180px;
+        flex-shrink: 0;
+    }
+
+    .dropdown {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 35px 12px 15px;
+        font-size: 16px;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 16px;
+        cursor: pointer;
+        height: 45px;
+        width: 100%;
+    }
+
+    .item-list {
+        margin-top: 20px;
+        padding-top: 5px;
+    }
+
+    .list-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 15px;
+    }
+
+    .list-item-content {
+        flex-grow: 1;
+        padding-left: 10px;
+        padding-right: 10px;
+        max-width: calc(100% - 145px);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 5px;
+    }
+
+    .action-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 5px;
+        border: none;
+        background-color: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .action-icon {
+        width: 20px;
+        height: 20px;
+        stroke: white;
+        stroke-width: 2;
+        fill: none;
+    }
+
+    .list-bullet {
+        min-width: 20px;
+        padding-top: 2px;
+    }
+
+    .save-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .save-icon {
+        width: 32px;
+        height: 32px;
+        stroke: #2c4658;
+        stroke-width: 2;
+        fill: none;
+    }
+
+    /* Specific styles for different sections */
+    .ingredient-row {
+        display: flex;
+        gap: 10px;
+    }
+
+    .ingredient-quantity {
+        width: 120px;
+    }
+
+    .ingredient-unit {
+        width: 150px;
+    }
+
+    .step-action-btns,
+    .note-action-btns {
+        margin-top: 8px;
     }
 </style>

@@ -1,271 +1,114 @@
-<section class="search-container">
-    <div class="search-content">
-        <h1 class="page-title">overskrtift</h1>
-        <button class="settings-icon" aria-label="Settings"></button>
+---
+// index.astro
+import SearchBar from "../components/SearchBar.svelte";
+import SearchResults from "../components/SearchResults.svelte";
+import Layout from "../layouts/Layout.astro";
+import { getRecipesApi } from "../components/APIFunctions.js";
 
-        <form class="search-bar" role="search">
-            <div class="search-input-wrapper">
-                <label for="search-input" class="visually-hidden">Search</label>
-                <input
-                    id="search-input"
-                    class="search-input"
-                    type="text"
-                    placeholder="Sertch..."
-                    aria-label="Search input"
-                />
-                <div class="search-icon" aria-hidden="true"></div>
-                <button
-                    type="submit"
-                    class="search-button"
-                    aria-label="Perform search"></button>
-            </div>
-        </form>
+// Fetch recipes from backend
+const recipes = await getRecipesApi().catch((error) => {
+    console.error("Failed to fetch recipes:", error);
+    return [];
+});
+---
 
-        <div class="category-list">
-            <article class="category-card">
-                <h2 class="category-title">navn</h2>
-                <div class="category-icon" aria-hidden="true"></div>
-                <p class="category-name">kategori</p>
-                <span class="category-duration">10 min</span>
-            </article>
+<Layout title="Cookbook App">
+    <div class="container">
+        <header>
+            <h1 class="page-title">overskrtift</h1>
+        </header>
 
-            <article class="category-card">
-                <h2 class="category-title">navn</h2>
-                <div class="category-icon" aria-hidden="true"></div>
-                <p class="category-name">kategori</p>
-                <span class="category-duration">10 min</span>
-            </article>
+        <SearchBar client:load id="search-bar" />
+        <SearchResults client:load id="search-results" recipes={recipes} />
 
-            <article class="category-card">
-                <h2 class="category-title">navn</h2>
-                <div class="category-icon" aria-hidden="true"></div>
-                <p class="category-name">kategori</p>
-                <span class="category-duration">10 min</span>
-            </article>
-        </div>
-
-        <button class="add-button" aria-label="Add new item">+</button>
+        <a href="/add-recipe" class="add-button" aria-label="Add new recipe"
+            >+</a
+        >
     </div>
-    <div class="background"></div>
-</section>
+</Layout>
+
+<script>
+    // Connect search bar and results components
+    document.addEventListener("DOMContentLoaded", () => {
+        const searchBar = document.getElementById("search-bar");
+        const searchResults = document.getElementById("search-results");
+
+        if (searchBar && searchResults) {
+            // Handle search events
+            searchBar.addEventListener("search", (event) => {
+                const resultsComponent = searchResults.__svelte__;
+
+                if (resultsComponent && resultsComponent.updateResults) {
+                    if (event.detail && event.detail.results) {
+                        // Update with search results
+                        resultsComponent.updateResults(event.detail.results);
+                    } else {
+                        // Reset to show all recipes
+                        resultsComponent.resetResults();
+                    }
+                }
+            });
+        }
+    });
+</script>
+
 <style>
     :root {
-        --default-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-            Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
-            "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
-            "Source Han Sans CN", sans-serif;
+        --primary-color: #55a7ac;
+        --text-light: #ffffff;
+        --text-dark: #000000;
+        --card-radius: 24px;
     }
 
-    .search-container {
-        position: relative;
-        width: 741px;
-        height: 1403px;
-        margin: 0 auto;
-        overflow: hidden;
-    }
-
-    .search-container * {
+    * {
         box-sizing: border-box;
+        margin: 0;
+        padding: 0;
     }
 
-    .search-content {
+    .container {
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 20px;
         position: relative;
-        width: 646px;
-        height: 1403px;
-        margin-left: 48px;
-        z-index: 1;
-        overflow: visible auto;
-    }
-
-    .search-bar {
-        position: relative;
-        width: 646px;
-        height: 68px;
-        margin-top: 159px;
-        z-index: 24;
-    }
-
-    .search-input-wrapper {
-        position: absolute;
-        width: 646px;
-        height: 68px;
-        top: 0;
-        left: 0;
-        background: #d9d9d9;
-        border-radius: 24px;
-    }
-
-    .search-input {
-        display: flex;
-        align-items: center;
-        position: absolute;
-        width: 514px;
-        height: 68px;
-        top: 0;
-        left: 63px;
-        color: rgba(0, 0, 0, 0.5);
-        font-family: Inter, var(--default-font);
-        font-size: 32px;
-        font-weight: 400;
-        line-height: 38.727px;
-        border: none;
-        background: transparent;
-    }
-
-    .search-icon {
-        position: absolute;
-        width: 63px;
-        height: 68px;
-        top: 0;
-        left: 0;
-        background: url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-02-26/2edfb388-af39-4a02-a64f-8800f7d64b4e.png)
-            no-repeat center;
-        background-size: cover;
-    }
-
-    .search-button {
-        position: absolute;
-        width: 48px;
-        height: 48px;
-        top: 10px;
-        left: 590px;
-        background: url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-02-26/b8e07710-f204-4f7f-adac-199fcb7a5ed4.png)
-            no-repeat center;
-        background-size: cover;
-        border: none;
-        cursor: pointer;
-    }
-
-    .category-card {
-        position: relative;
-        width: 306px;
-        height: 157px;
-        margin-top: 244px;
-        background: #54a7ac;
-        border-radius: 24px;
-        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    }
-
-    .category-title {
-        position: absolute;
-        top: 0;
-        left: 17px;
-        color: #ffffff;
-        font-family: Inter, var(--default-font);
-        font-size: 32px;
-        font-weight: 700;
-        line-height: 38.727px;
-    }
-
-    .category-icon {
-        position: absolute;
-        width: 48px;
-        height: 48px;
-        top: 13px;
-        left: 238px;
-        background: url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-02-26/7898c242-0c7d-4776-9b80-90e58e6de215.png)
-            no-repeat center;
-        background-size: cover;
-    }
-
-    .category-name {
-        position: absolute;
-        top: 95px;
-        left: 17px;
-        color: #ffffff;
-        font-family: Inter, var(--default-font);
-        font-size: 32px;
-        font-weight: 400;
-        line-height: 38.727px;
-    }
-
-    .category-duration {
-        position: absolute;
-        width: 62px;
-        height: 62px;
-        top: 95px;
-        left: 231px;
-        color: #ffffff;
-        font-family: Inter, var(--default-font);
-        font-size: 20px;
-        font-weight: 400;
-        line-height: 24.205px;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .add-button {
-        position: relative;
-        width: 128px;
-        height: 144px;
-        margin: 592px 0 0 518px;
-        border-radius: 100px;
-        background: #55a7ac;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #284b63;
-        font-family: Inter, var(--default-font);
-        font-size: 128px;
-        font-weight: 400;
-        line-height: 144px;
-        text-align: center;
-        cursor: pointer;
+        min-height: 100vh;
     }
 
     .page-title {
-        position: absolute;
-        width: 646px;
-        top: 22px;
-        left: 0;
-        color: #55a7ac;
-        font-family: Inter, var(--default-font);
+        color: var(--primary-color);
         font-size: 64px;
         font-weight: 600;
-        line-height: 77.455px;
+        margin-bottom: 40px;
         text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     }
 
-    .settings-icon {
-        position: absolute;
-        width: 48px;
-        height: 48px;
-        top: 82px;
-        left: 590px;
-        background: url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-02-26/f641d45e-e6e0-4a68-9337-a0f0d3d8e228.png)
-            no-repeat center;
-        background-size: cover;
-    }
-
-    .category-list {
-        position: absolute;
-        top: 284px;
-        left: 0;
+    .add-button {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 128px;
+        height: 128px;
+        background-color: var(--primary-color);
+        border-radius: 50%;
         display: flex;
-        gap: 34px;
+        justify-content: center;
+        align-items: center;
+        color: #284b63;
+        font-size: 128px;
+        line-height: 1;
+        text-decoration: none;
+        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     }
 
-    .background {
-        position: absolute;
-        width: 741px;
-        height: 1403px;
-        top: 0;
-        left: 0;
-        background: #ffffff;
-        z-index: -1;
-    }
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 48px;
+        }
 
-    .visually-hidden {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        margin: -1px;
-        padding: 0;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
+        .add-button {
+            width: 100px;
+            height: 100px;
+            font-size: 100px;
+        }
     }
 </style>

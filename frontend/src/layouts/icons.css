@@ -1,0 +1,22 @@
+/* Icon styling that inherits colors from CSS variables */
+.icon {
+    stroke: var(--icon-color);
+    stroke-width: 2;
+    fill: none;
+}
+
+.icon-favorite {
+    stroke: var(--accent-color);
+    stroke-width: 2;
+    fill: none;
+}
+
+.icon-action {
+    stroke: var(--text-on-primary);
+    stroke-width: 2;
+    fill: none;
+}
+
+.icon-favorite.filled {
+    fill: var(--accent-color);
+}

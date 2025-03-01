@@ -5,27 +5,12 @@ import IngredientEditor from "../../components/IngredientEditor.svelte";
 import StepsEditor from "../../components/StepsEditor.svelte";
 import NotesEditor from "../../components/NotesEditor.svelte";
 import SaveButton from "../../components/SaveButton.svelte";
-import { getRecipeApi } from "../../components/APIFunctions.js";
-
-// Get recipe ID from URL
-const { id } = Astro.params;
-
-// Fetch recipe data
-let recipe = await getRecipeApi(id).catch((error) => {
-    console.error("Error fetching recipe:", error);
-    return null;
-});
-
-// Redirect if recipe not found
-if (!recipe) {
-    return Astro.redirect("/");
-}
 ---
 
-<Layout title={`Rediger ${recipe.recipeName}`}>
+<Layout title="Ny Oppskrift">
     <div class="container">
         <header class="recipe-header">
-            <a href={`/recipe/${id}`} class="back-button" aria-label="Go back">
+            <a href="/" class="back-button" aria-label="Go back">
                 <svg
                     class="back-icon"
                     viewBox="0 0 24 24"
@@ -36,23 +21,23 @@ if (!recipe) {
                     <path d="M15 6l-6 6 6 6"></path>
                 </svg>
             </a>
-            <h1 class="recipe-title">Rediger Oppskrift</h1>
+            <h1 class="recipe-title">Ny Oppskrift</h1>
         </header>
 
         <!-- Information Section -->
-        <RecipeInformation client:load recipeData={recipe} />
+        <RecipeInformation client:load />
 
         <!-- Ingredients Section -->
-        <IngredientEditor client:load ingredients={recipe.ingredients} />
+        <IngredientEditor client:load />
 
         <!-- Steps Section -->
-        <StepsEditor client:load steps={recipe.steps} />
+        <StepsEditor client:load />
 
         <!-- Notes Section -->
-        <NotesEditor client:load notes={recipe.notes} />
+        <NotesEditor client:load />
 
         <!-- Save Button -->
-        <SaveButton client:load isNewRecipe={false} recipeId={id} />
+        <SaveButton client:load isNewRecipe={true} />
     </div>
 </Layout>
 

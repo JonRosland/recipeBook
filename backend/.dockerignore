@@ -1,31 +1,50 @@
-# General
+# Version control
 .git
 .gitignore
-.dockerignore
-Dockerfile
-README.md
-.vscode
-*.md
-mongodb/
 
-# Python backend ignores
-__pycache__
-*.pyc
-*.pyo
-*.pyd
-.pytest_cache
-venv
-env
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# Miscellaneous files
+# Environment files
+.env*
+
+# Logs
+logs/
 *.log
-*.csv
-*.dat
-*.out
-*.pid
-*.tmp
-*.temp
+
+# Documentation
+docs/
+README.md
+CHANGELOG.md
+LICENSE
+
+# IDE specific files
+.idea/
+.vscode/
 *.swp
 *.swo
-*.bak
-*.orig
+.DS_Store
+
+# Docker files
+Dockerfile
+.dockerignore

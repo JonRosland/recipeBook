@@ -1,51 +1,101 @@
 # Recipe Book
 
-```sh
+A full-stack recipe management application with Deno frontend and Python backend.
+
+## 📋 Features
+
+- Store and manage your favorite recipes
+- Search by ingredients or recipe name
+- Responsive design for desktop and mobile
+- Edit and add new recipes easily
+
+## 🛠️ Technology Stack
+
+- **Frontend**: Astro + Svelte with Deno runtime
+- **Backend**: Python with Flask
+- **Database**: MongoDB
+- **Deployment**: Docker for easy local and production deployment
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Docker and Docker Compose
+- Deno (for local development)
+- Python 3.x (for local backend development)
+
+### Installation
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/yourusername/recipeBook.git
+cd recipeBook
+```
+
+2. **Run with Docker (recommended)**
+
+```bash
+docker-compose up
+```
+
+The application will be available at:
+- Frontend: http://localhost:8085
+- Backend API: http://localhost:6088/api
+- MongoDB Express (database admin): http://localhost:8081
+
+### Local Development
+
+#### Frontend (Deno + Astro)
+
+```bash
+cd frontend
+yarn install
+yarn dev
+```
+
+#### Backend (Python)
+
+```bash
+cd backend
+python -m venv env
+source env/bin/activate  # On Windows: env\Scripts\activate
 pip install -r requirements.txt
-python3 backend/main.py
-
-npm install
-npm run dev
-
+python main.py
 ```
 
+## 📁 Project Structure
 
-```text
+```
 /
-├───backend
-├───frontend
-│   ├───public
-│   └───src
-│       ├───components
-│       │   └───edit
-│       ├───layouts
-│       ├───lib
-│       ├───pages
-│       │   ├───edit
-│       │   └───recipe
-│       └───stores
-├───mongodb
-│   ├───mongo-config
-│   └───mongo-data
-└───public
+├── backend/                 # Python Flask backend
+│   ├── api.py               # API routes and handlers
+│   ├── main.py              # Entry point
+│   ├── server.py            # Server configuration
+│   └── requirements.txt     # Python dependencies
+├── frontend/                # Astro + Svelte frontend
+│   ├── src/
+│   │   ├── components/      # Reusable Svelte components
+│   │   ├── layouts/         # Page layouts
+│   │   ├── pages/           # Astro pages
+│   │   └── stores/          # State management
+│   ├── public/              # Static assets
+│   ├── astro.config.mjs     # Astro configuration
+│   └── package.json         # Frontend dependencies
+├── mongodb/                 # MongoDB data directory
+└── docker-compose.yml       # Docker configuration
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
 
 ## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
-
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| `docker-compose up`       | Start the complete application stack             |
+| `cd frontend && yarn dev` | Start frontend dev server at `localhost:4321`    |
+| `cd frontend && yarn build` | Build frontend for production                  |
+| `cd frontend && yarn preview` | Preview production build locally             |
+| `cd backend && python main.py` | Start backend server at `localhost:6088`    |
 
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details

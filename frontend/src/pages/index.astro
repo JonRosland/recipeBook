@@ -1,8 +1,8 @@
 ---
 // index.astro
-import SearchBar from "../components/SearchBar.svelte";
-import SearchResults from "../components/SearchResults.svelte";
 import Layout from "../layouts/Layout.astro";
+import SearchBar from "../components/SearchBar.svelte";
+import RecipeGrid from "../components/RecipeGrid.svelte";
 import { getRecipesApi } from "../components/APIFunctions.js";
 
 // Fetch recipes from backend
@@ -15,67 +15,28 @@ const recipes = await getRecipesApi().catch((error) => {
 <Layout title="Cookbook App">
     <div class="container">
         <header>
-            <h1 class="page-title">overskrtift</h1>
+            <h1 class="page-title">Oppskrifter</h1>
         </header>
 
-        <SearchBar client:load id="search-bar" />
-        <SearchResults client:load id="search-results" recipes={recipes} />
+        <SearchBar client:load />
+        <RecipeGrid client:load recipes={recipes} />
 
-        <a href="/add-recipe" class="add-button" aria-label="Add new recipe"
+        <a href="/recipe/new" class="add-button" aria-label="Add new recipe"
             >+</a
         >
     </div>
 </Layout>
 
-<script>
-    // Connect search bar and results components
-    document.addEventListener("DOMContentLoaded", () => {
-        const searchBar = document.getElementById("search-bar");
-        const searchResults = document.getElementById("search-results");
-
-        if (searchBar && searchResults) {
-            // Handle search events
-            searchBar.addEventListener("search", (event) => {
-                const resultsComponent = searchResults.__svelte__;
-
-                if (resultsComponent && resultsComponent.updateResults) {
-                    if (event.detail && event.detail.results) {
-                        // Update with search results
-                        resultsComponent.updateResults(event.detail.results);
-                    } else {
-                        // Reset to show all recipes
-                        resultsComponent.resetResults();
-                    }
-                }
-            });
-        }
-    });
-</script>
-
 <style>
-    :root {
-        --primary-color: #55a7ac;
-        --text-light: #ffffff;
-        --text-dark: #000000;
-        --card-radius: 24px;
-    }
-
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
     .container {
         max-width: 640px;
         margin: 0 auto;
-        padding: 20px;
+        padding: var(--spacing-lg);
         position: relative;
         min-height: 100vh;
     }
 
     .page-title {
-        color: var(--primary-color);
         font-size: 64px;
         font-weight: 600;
         margin-bottom: 40px;
@@ -84,20 +45,20 @@ const recipes = await getRecipesApi().catch((error) => {
 
     .add-button {
         position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 128px;
-        height: 128px;
+        bottom: var(--spacing-xxl);
+        right: var(--spacing-xxl);
+        width: 70px;
+        height: 70px;
         background-color: var(--primary-color);
         border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #284b63;
-        font-size: 128px;
+        color: var(--primary-color-dark);
+        font-size: 70px;
         line-height: 1;
         text-decoration: none;
-        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+        box-shadow: var(--floating-button-shadow);
     }
 
     @media (max-width: 768px) {
@@ -106,9 +67,9 @@ const recipes = await getRecipesApi().catch((error) => {
         }
 
         .add-button {
-            width: 100px;
-            height: 100px;
-            font-size: 100px;
+            width: 60px;
+            height: 60px;
+            font-size: 60px;
         }
     }
 </style>

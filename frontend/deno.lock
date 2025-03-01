@@ -59,15 +59,10 @@
     "packageJson": {
       "dependencies": [
         "npm:@astrojs/deno@^5.0.1",
-        "npm:@astrojs/svelte@^5.6.0",
-        "npm:astro@^4.11.5",
-        "npm:cors@^2.8.5",
-        "npm:deno@^0.1.1",
-        "npm:express@^4.18.2",
-        "npm:mongodb@^6.3.0",
-        "npm:mongoose@^8.1.1",
-        "npm:nanostores@^0.9.5",
-        "npm:svelte@^4.2.9"
+        "npm:@astrojs/svelte@7.0.5",
+        "npm:astro@5.4.1",
+        "npm:nanostores@^0.11.4",
+        "npm:svelte@^5.20.5"
       ]
     }
   }

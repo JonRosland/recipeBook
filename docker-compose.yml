@@ -1,94 +1,119 @@
 services:
   mongo:
-    image: mongo:latest
-    container_name: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_INITDB_DATABASE: RecipeDB
-    ports:
-      - "27017:27017"
-    networks:
-      - mongonet
-    volumes:
-      - ./mongodb/mongo-data:/data/db
-      - ./mongodb/mongo-config:/data/configdb
-
+      image: mongo:latest
+      container_name: mongo
+      restart: always
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+        MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+        MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+        # Forward environment variables to the init script
+        MONGO_USERNAME: ${MONGO_USERNAME}
+        MONGO_PASSWORD: ${MONGO_PASSWORD}
+        MONGO_DATABASE: ${MONGO_DATABASE}
+        RECIPE_COLLECTION_NAME: ${RECIPE_COLLECTION_NAME:-recipes}
+      ports:
+        - "${HOST_MONGO_PORT:-27017}:27017"
+      volumes:
+        - ./mongodb/mongo-data:/data/db
+        - ./mongodb/mongo-config:/data/configdb
+        # Add initialization script to create application user
+        - ./mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      networks:
+        - app-network
+      healthcheck:
+        # Simplified healthcheck that's more reliable
+        test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+        start_period: 30s
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-express
-    # restart: on-failure
-    #depends_on:
-    #  - mongo
+    restart: on-failure
+    depends_on:
+      mongo:
+        condition: service_healthy
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: root
-      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/
+      ME_CONFIG_MONGODB_SERVER: mongo
     ports:
-      - "8081:8081"
+      - "${HOST_MONGO_EXPRESS_PORT:-8081}:8081"
     networks:
-      - mongonet
-
-  #  backend:
-  #    container_name: backend
-  #    image: jonro/recipebook:backend
-  #    ports:
-  #      - '6088:6088'
-  #    stop_signal: SIGINT
-  #    environment:
-  #      DB_HOST: 10.0.0.21
-  #      DB_PORT: 27017
-  #      DB_USER: root
-  #      DB_PASS: root
-  #    networks:
-  #      - mongonet
-
-  #  backend:
-  #    container_name: backend
-  #    build:
-  #      context: backend
-  #      target: builder
-  #    ports:
-  #      - '4000:4000'
-  #    stop_signal: SIGINT
-  #    networks:
-  #      - mongonet
-  #    #depends_on:
-  #    #  - mongo
-
-  #  frontend:
-  #    container_name: frontend
-  #    build:
-  #      context: frontend
-  #    ports:
-  #      - '4321:4321'
-  #    networks:
-  #      - mongonet
+      - app-network
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      DB_HOST: mongo
+      DB_PORT: ${MONGO_PORT:-27017}
+      DB_USER: ${MONGO_USERNAME}
+      DB_PASS: ${MONGO_PASSWORD}
+      HOST: ${BACKEND_HOST:-0.0.0.0}
+      PORT: ${BACKEND_PORT:-6088}
+      WORKERS: ${BACKEND_WORKERS:-2}
+      LOG_LEVEL: ${BACKEND_LOG_LEVEL:-info}
+      FLASK_ENV: ${FLASK_ENV:-production}
+      SECRET_KEY: ${SECRET_KEY:-default_dev_key_change_in_production}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-*}
+      RECIPE_DB_NAME: ${RECIPE_DB_NAME:-recipeDB}
+      RECIPE_COLLECTION_NAME: ${RECIPE_COLLECTION_NAME:-recipes}
+      LOG_FILE_PATH: /logs/app.log
+    ports:
+      - "${HOST_BACKEND_PORT:-6088}:${BACKEND_PORT:-6088}"
+    volumes:
+      - backend-logs:/logs
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${BACKEND_PORT:-6088}/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
   frontend:
     container_name: frontend
-    image: jonro/recipebook:frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      # For server-side API calls (container to container)
+      SERVER_API_URL: ${SERVER_API_URL:-http://backend:6088/api/}
+      # For client-side API calls (browser to frontend proxy)
+      PUBLIC_API_URL: ${PUBLIC_API_URL:-/api/}
+      PUBLIC_ENABLE_FAVORITES: ${PUBLIC_ENABLE_FAVORITES:-true}
+      PUBLIC_ENABLE_SEARCH: ${PUBLIC_ENABLE_SEARCH:-true}
+      PUBLIC_THEME: ${PUBLIC_THEME:-light}
+      PUBLIC_ITEMS_PER_PAGE: ${PUBLIC_ITEMS_PER_PAGE:-12}
+      PORT: ${FRONTEND_PORT:-8085}
+      BASE_PATH: ${BASE_PATH:-/}
     ports:
-      - '8085:8085'
-    stop_signal: SIGINT
-#    networks:
-#      - mongonet
-#  recipe-book:
-#    container_name: recipe-book
-#    image: user/recipe-book:v1.0
-#    #build:
-#    #  context: .
-#    #  dockerfile: Dockerfile
-#    ports:
-#      - '4000:4000'
-#      - '4321:4321'
-#    stop_signal: SIGINT
-#    networks:
-#      - mongonet
-
+      - "${HOST_FRONTEND_PORT:-8085}:${FRONTEND_PORT:-8085}"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${FRONTEND_PORT:-8085}/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
 networks:
-  #  traefik-proxy:
-  #    external: true
-  mongonet:
-    name: mongonet
+  app-network:
     driver: bridge
+volumes:
+  mongo-data:
+  mongo-config:
+  backend-logs:

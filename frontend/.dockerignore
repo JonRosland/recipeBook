@@ -1,3 +1,42 @@
+# Version control
+.git
+.gitignore
+
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs that are not needed
+.cache/
+.output/
+
+# Environment files
+.env*
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 .DS_Store
-node_modules
-dist
+
+# Docker files
+Dockerfile
+.dockerignore
+NodeDockerfile
+
+# Testing files
+coverage/
+.nyc_output/
+
+# Deno cache
+.deno/
+
+# Dev tools configuration
+.prettierrc
+.eslintrc

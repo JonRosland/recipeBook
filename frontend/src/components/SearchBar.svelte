@@ -1,13 +1,39 @@
-<!-- SearchBar.svelte -->
 <script>
-    import { createEventDispatcher } from "svelte";
     import { searchRecipeApi } from "./APIFunctions.js";
-
-    const dispatch = createEventDispatcher();
+    import { searchResults, hasSearched } from "../stores/SearchStore.js";
 
     const optionsMap = {
-        category: ["Middag", "Dessert", "Suppe", "Forett", "Bakst", "Kake"],
-        region: ["Asia", "Italia", "Frankrike", "Norge", "Annet"],
+        category: [
+            "Middag",
+            "Dessert",
+            "Suppe",
+            "Forett",
+            "Søt bakst",
+            "Grov bakst",
+            "Kake",
+            "Lunsj",
+            "Salat",
+            "Pasta",
+            "Pizza",
+            "Sauser",
+            "Snacks",
+            "Grillmat",
+            "Sjømat",
+            "Småretter",
+            "Streetfood",
+        ],
+        region: [
+            "Asia",
+            "Italia",
+            "Frankrike",
+            "Nordisk",
+            "India",
+            "Middelhavet",
+            "Slavisk",
+            "Meksikansk",
+            "Europa",
+            "Ukategorisert",
+        ],
     };
 
     const keys = ["Ingredienser", ...Object.keys(optionsMap)];
@@ -18,11 +44,10 @@
 
     // Create URL-friendly search string
     $: {
-        // Format search query depending on the backend requirements
         if (selectedValue) {
-            searchQueryString = encodeURIComponent(
-                JSON.stringify({ [selectedKey]: selectedValue }),
-            );
+            searchQueryString = JSON.stringify({
+                [selectedKey]: selectedValue,
+            });
         } else {
             searchQueryString = "";
         }
@@ -32,17 +57,20 @@
         event.preventDefault();
 
         if (!selectedValue) {
-            // If no value, show all recipes
-            dispatch("search", { results: [] });
+            // Reset to show all recipes
+            searchResults.set([]);
+            hasSearched.set(false);
             return;
         }
 
         try {
             const results = await searchRecipeApi(searchQueryString);
-            dispatch("search", { results });
+            searchResults.set(results);
+            hasSearched.set(true);
         } catch (error) {
             console.error("Search error:", error);
-            dispatch("search", { results: [] });
+            searchResults.set([]);
+            hasSearched.set(true);
         }
     }
 </script>
@@ -60,8 +88,10 @@
             height="6"
             viewBox="0 0 12 6"
             fill="none"
+            stroke="var(--icon-color)"
+            stroke-width="1.5"
         >
-            <path d="M1 1L6 5L11 1" stroke="black" stroke-width="1.5" />
+            <path d="M1 1L6 5L11 1"></path>
         </svg>
     </div>
 
@@ -75,11 +105,22 @@
     {:else if optionsMap[selectedKey]}
         <div class="value-dropdown-container">
             <select class="value-dropdown" bind:value={selectedValue}>
-                <option value="">Select {selectedKey}</option>
+                <option value="">Velg {selectedKey}</option>
                 {#each optionsMap[selectedKey] as value}
-                    <option {value}>{value}</option>
+                    <option value={value}>{value}</option>
                 {/each}
             </select>
+            <svg
+                class="dropdown-arrow"
+                width="12"
+                height="6"
+                viewBox="0 0 12 6"
+                fill="none"
+                stroke="var(--icon-color)"
+                stroke-width="1.5"
+            >
+                <path d="M1 1L6 5L11 1"></path>
+            </svg>
         </div>
     {/if}
 
@@ -88,7 +129,7 @@
             viewBox="0 0 24 24"
             width="28"
             height="28"
-            stroke="currentColor"
+            stroke="var(--icon-color)"
             stroke-width="2"
             fill="none"
         >
@@ -100,11 +141,11 @@
 
 <style>
     .search-bar {
-        background: #d9d9d9;
-        border-radius: 24px;
+        background: var(--input-background);
+        border-radius: var(--card-radius);
         display: flex;
         align-items: center;
-        padding: 0 10px 0 20px;
+        padding: 0 var(--spacing-sm) 0 var(--spacing-lg);
         margin-bottom: 40px;
         height: 68px;
         position: relative;
@@ -123,7 +164,7 @@
     }
 
     .search-dropdown {
-        width: 140px;
+        width: 160px;
         padding-right: 15px;
     }
 
@@ -158,7 +199,7 @@
     .search-input {
         background: transparent;
         border: none;
-        font-size: 32px;
+        font-size: 22px;
         color: rgba(0, 0, 0, 0.5);
         width: 100%;
         outline: none;

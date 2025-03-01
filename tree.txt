@@ -1,0 +1,66 @@
+.
+recipeBook
+├── backend
+│   ├── api.py
+│   ├── Dockerfile
+│   ├── main.py
+│   ├── __pycache__
+│   │   ├── api.cpython-312.pyc
+│   │   └── server.cpython-312.pyc
+│   ├── recipeEx.json
+│   ├── recipes
+│   ├── requirements.txt
+│   ├── server.py
+│   └── setup_environment.sh
+├── CLAUDE.md
+├── docker-compose.yml
+├── frontend
+│   ├── astro.config.mjs
+│   ├── deno.lock
+│   ├── Dockerfile
+│   ├── entry.mjs
+│   ├── package.json
+│   ├── public
+│   ├── run-server.mjs
+│   ├── src
+│   │   ├── components
+│   │   │   ├── APIFunctions.js
+│   │   │   ├── IngredientEditor.svelte
+│   │   │   ├── NotesEditor.svelte
+│   │   │   ├── RecipeCard.svelte
+│   │   │   ├── RecipeGrid.svelte
+│   │   │   ├── RecipeHeader.svelte
+│   │   │   ├── RecipeInformation.svelte
+│   │   │   ├── RecipeIngredients.svelte
+│   │   │   ├── RecipeNotes.svelte
+│   │   │   ├── RecipeSteps.svelte
+│   │   │   ├── SaveButton.svelte
+│   │   │   ├── SearchBar.svelte
+│   │   │   ├── SearchButton.svelte
+│   │   │   └── StepsEditor.svelte
+│   │   ├── env.d.ts
+│   │   ├── layouts
+│   │   │   ├── icons.css
+│   │   │   └── Layout.astro
+│   │   ├── pages
+│   │   │   ├── edit
+│   │   │   │   └── [id].astro
+│   │   │   ├── index.astro
+│   │   │   └── recipe
+│   │   │       ├── [id].astro
+│   │   │       └── new.astro
+│   │   └── stores
+│   │       ├── RecipeStore.js
+│   │       └── SearchStore.js
+│   ├── svelte.config.js
+│   ├── tsconfig.json
+│   └── yarn.lock
+├── init-mongo.js
+├── install.sh
+├── public
+│   └── favicon.svg
+├── README.md
+├── tree.txt
+└── update.sh
+
+14 directories, 49 files

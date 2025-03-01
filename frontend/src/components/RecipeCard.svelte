@@ -1,4 +1,3 @@
-<!-- RecipeCard.svelte -->
 <script>
     import { toggleFavoriteApi } from "./APIFunctions.js";
 
@@ -15,43 +14,59 @@
     };
 </script>
 
-<article class="recipe-card">
-    <div class="card-header">
-        <h2 class="card-title">{recipe.recipeName}</h2>
-        <button
-            class="favorite-btn"
-            on:click={toggleFavorite}
-            aria-label={recipe.favorite
-                ? "Remove from favorites"
-                : "Add to favorites"}
-        >
-            <svg
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-                fill={recipe.favorite ? "currentColor" : "none"}
+<a href={`/recipe/${recipe._id}`} class="card-link-wrapper">
+    <article class="recipe-card">
+        <div class="card-header">
+            <h2 class="card-title">{recipe.recipeName || "Uten navn"}</h2>
+            <button
+                class="favorite-btn"
+                on:click={(e) => {
+                    e.preventDefault();
+                    toggleFavorite(e);
+                }}
+                aria-label={recipe.favorite
+                    ? "Remove from favorites"
+                    : "Add to favorites"}
             >
-                <path
-                    d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z"
-                ></path>
-            </svg>
-        </button>
-    </div>
-    <a href={`/recipe/${recipe._id}`} class="card-link">
+                <svg
+                    viewBox="0 0 24 24"
+                    stroke="var(--accent-color)"
+                    stroke-width="2"
+                    fill={recipe.favorite ? "var(--accent-color)" : "none"}
+                    class="favorite-icon"
+                >
+                    <path
+                        d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z"
+                    ></path>
+                </svg>
+            </button>
+        </div>
         <div class="card-footer">
             <p class="category">{recipe.category || ""}</p>
-            <p class="duration">{recipe.time || 0} min</p>
+            <p class="duration">
+                <svg
+                    class="clock-icon"
+                    viewBox="0 0 24 24"
+                    stroke="var(--text-on-primary)"
+                    stroke-width="2"
+                    fill="none"
+                >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                {recipe.time || ""}
+            </p>
         </div>
-    </a>
-</article>
+    </article>
+</a>
 
 <style>
     .recipe-card {
-        background-color: var(--primary-color, #55a7ac);
-        border-radius: 24px;
-        padding: 20px;
-        color: #ffffff;
-        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+        background-color: var(--primary-color);
+        border-radius: var(--card-radius);
+        padding: var(--spacing-lg);
+        color: var(--text-on-primary);
+        box-shadow: var(--card-shadow);
         display: flex;
         flex-direction: column;
         transition: transform 0.2s ease;
@@ -70,9 +85,10 @@
     }
 
     .card-title {
-        font-size: 32px;
+        font-size: 24px;
         font-weight: 700;
         margin: 0;
+        color: var(--text-on-primary);
     }
 
     .favorite-btn {
@@ -84,16 +100,15 @@
     }
 
     .favorite-btn svg {
-        width: 48px;
-        height: 48px;
+        width: 24px;
+        height: 24px;
     }
 
-    .card-link {
+    .card-link-wrapper {
         text-decoration: none;
         color: inherit;
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
+        display: block;
+        height: 100%;
     }
 
     .card-footer {
@@ -104,14 +119,22 @@
     }
 
     .category {
-        font-size: 32px;
+        font-size: 18px;
         font-weight: 400;
         margin: 0;
     }
 
     .duration {
-        font-size: 20px;
+        font-size: 14px;
         text-align: center;
         margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .clock-icon {
+        width: 16px;
+        height: 16px;
     }
 </style>

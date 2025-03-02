@@ -6,6 +6,7 @@
     export let origin = "";
     export let recipeId = "";
     export let favorite = false;
+    export let isDesktopView = false;
 
     // Local reactive state
     let isFavorite = false;
@@ -13,7 +14,19 @@
     onMount(() => {
         // Initialize the local state when the component mounts
         isFavorite = favorite;
+        
+        // Check if we're on desktop
+        checkDesktopView();
+        window.addEventListener('resize', checkDesktopView);
+        
+        return () => {
+            window.removeEventListener('resize', checkDesktopView);
+        };
     });
+    
+    function checkDesktopView() {
+        isDesktopView = window.innerWidth >= 1024;
+    }
 
     // Update when the prop changes
     $: isFavorite = favorite;
@@ -25,6 +38,11 @@
         } catch (error) {
             console.error("Error toggling favorite status:", error);
         }
+    }
+    
+    // Expose method to update desktop state from outside
+    export function updateDesktopState(isDesktop) {
+        isDesktopView = isDesktop;
     }
 </script>
 
@@ -42,7 +60,11 @@
     </a>
     <div class="header-content">
         <h1 class="recipe-title">{title}</h1>
-        <h2 class="recipe-origin">Opphav: {origin}</h2>
+        
+        <!-- Only show origin in header on mobile view -->
+        {#if origin && !isDesktopView}
+            <h2 class="recipe-origin header-origin">Opphav: {origin}</h2>
+        {/if}
     </div>
     <div class="header-actions">
         <button

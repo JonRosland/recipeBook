@@ -4,6 +4,7 @@ import RecipeHeader from "../../components/RecipeHeader.svelte";
 import RecipeNotes from "../../components/RecipeNotes.svelte";
 import RecipeIngredients from "../../components/RecipeIngredients.svelte";
 import RecipeSteps from "../../components/RecipeSteps.svelte";
+import RecipeInfoDisplay from "../../components/RecipeInfoDisplay.svelte";
 import { getRecipeApi } from "../../components/APIFunctions.js";
 
 // Get recipe ID from URL
@@ -42,6 +43,9 @@ if (!recipe && !errorMessage) {
 if (recipe && !recipe.recipeName && recipe.title) {
   recipe.recipeName = recipe.title;
 }
+
+// Check if we're on desktop (will be replaced client-side)
+const isDesktop = false;
 ---
 
 <Layout title={recipe ? (recipe.recipeName || "Recipe") : "Recipe Error"}>
@@ -53,34 +57,78 @@ if (recipe && !recipe.recipeName && recipe.title) {
         <a href="/" class="back-button">Tilbake til oppskrifter</a>
       </div>
     ) : (
-      <>
-        <RecipeHeader
-          client:load
-          title={recipe.recipeName || recipe.title || "Uten navn"}
-          origin={recipe.origin}
-          recipeId={id}
-          favorite={recipe.favorite || false}
-        />
+      <div class="recipe-view-layout">
+        <!-- Recipe Header (different on desktop vs mobile) -->
+        <div class="recipe-header-container">
+          <RecipeHeader
+            client:load
+            title={recipe.recipeName || recipe.title || "Uten navn"}
+            origin={recipe.origin}
+            recipeId={id}
+            favorite={recipe.favorite || false}
+            isDesktopView={false} <!-- Will be set client-side -->
+          />
+        </div>
 
-        <RecipeNotes client:load notes={recipe.notes} />
-
-        <RecipeIngredients
-          client:load
-          ingredients={recipe.ingredients || []}
-          defaultPortion={recipe.portion || 1}
-        />
-
-        <RecipeSteps client:load steps={recipe.steps || []} />
-      </>
+        <!-- First row on desktop: Info and Notes -->
+        <div class="recipe-row info-notes-row">
+          <div class="recipe-info-container">
+            <RecipeInfoDisplay client:load recipe={recipe} />
+          </div>
+          
+          <div class="recipe-notes-container">
+            <RecipeNotes client:load notes={recipe.notes} />
+          </div>
+        </div>
+        
+        <!-- Second row on desktop: Ingredients and Steps -->
+        <div class="recipe-row ingredients-steps-row">
+          <div class="recipe-ingredients-container">
+            <RecipeIngredients
+              client:load
+              ingredients={recipe.ingredients || []}
+              defaultPortion={recipe.portion || 1}
+            />
+          </div>
+          
+          <div class="recipe-steps-container">
+            <RecipeSteps client:load steps={recipe.steps || []} />
+          </div>
+        </div>
+      </div>
     )}
   </div>
 </Layout>
+
+<script>
+  // Update layout based on screen size
+  function adjustLayout() {
+    const isDesktop = window.innerWidth >= 1024;
+    document.documentElement.classList.toggle('recipe-desktop-view', isDesktop);
+    
+    // Try to update the RecipeHeader component's isDesktopView prop
+    const headerComponent = document.querySelector('recipe-header');
+    if (headerComponent && typeof headerComponent.updateDesktopState === 'function') {
+      headerComponent.updateDesktopState(isDesktop);
+    }
+  }
+  
+  // Run on load and resize
+  window.addEventListener('load', adjustLayout);
+  window.addEventListener('resize', adjustLayout);
+</script>
 
 <style>
   .container {
     max-width: 640px;
     margin: 0 auto;
     padding: var(--spacing-lg);
+  }
+  
+  .recipe-view-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
   }
   
   .error-container {
@@ -116,5 +164,38 @@ if (recipe && !recipe.recipeName && recipe.title) {
   .back-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Desktop layout */
+  @media (min-width: 1024px) {
+    .container {
+      max-width: 1200px;
+    }
+    
+    .recipe-row {
+      display: grid;
+      gap: var(--spacing-xl);
+    }
+    
+    .info-notes-row {
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: var(--spacing-xl);
+    }
+    
+    .ingredients-steps-row {
+      grid-template-columns: 1fr 2fr;
+    }
+    
+    .recipe-info-container,
+    .recipe-notes-container,
+    .recipe-ingredients-container,
+    .recipe-steps-container {
+      height: 100%;
+    }
+    
+    /* Hide origin in header for desktop */
+    :global(html.recipe-desktop-view) .header-origin {
+      display: none;
+    }
   }
 </style>

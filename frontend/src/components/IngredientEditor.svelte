@@ -62,30 +62,39 @@
 <section class="section-card">
     <h3 class="section-title">Ingredienser</h3>
 
-    <div class="form-row">
+    <!-- Desktop and mobile layouts -->
+    <div class="form-layout">
+        <!-- Ingredient name (always full width) -->
         <input
             type="text"
-            class="input-field"
+            class="input-field name-input"
             placeholder="Ingrediens"
             bind:value={newIngredient.name}
         />
-    </div>
-
-    <div class="form-row ingredient-row">
-        <input
-            type="number"
-            class="input-field ingredient-quantity"
-            placeholder="Mengde"
-            bind:value={newIngredient.quantity}
-        />
-        <input
-            type="text"
-            class="input-field ingredient-unit"
-            placeholder="Enhet"
-            bind:value={newIngredient.unit}
-        />
-        <button class="btn" on:click={addIngredient}>Legg til Ingrediens</button
-        >
+        
+        <!-- This container handles the responsive behavior -->
+        <div class="inputs-container">
+            <!-- Quantity and unit will be side by side on all screens -->
+            <div class="unit-quantity-row">
+                <input
+                    type="number"
+                    class="input-field quantity-input"
+                    placeholder="Mengde"
+                    bind:value={newIngredient.quantity}
+                />
+                <input
+                    type="text"
+                    class="input-field unit-input"
+                    placeholder="Enhet"
+                    bind:value={newIngredient.unit}
+                />
+            </div>
+            
+            <!-- Button - shares row on desktop, own row on mobile -->
+            <button class="btn add-btn" on:click={addIngredient}>
+                Legg til Ingrediens
+            </button>
+        </div>
     </div>
 
     <div class="item-list">
@@ -170,25 +179,35 @@
         font-weight: 500;
     }
 
-    .form-row {
+    .form-layout {
         display: flex;
+        flex-direction: column;
         gap: var(--spacing-md);
-        margin-bottom: var(--spacing-md);
-        align-items: stretch;
     }
-
+    
     .input-field {
         background-color: var(--input-background);
         border: none;
         border-radius: var(--input-radius);
         padding: 12px 15px;
         font-size: 16px;
-        flex-grow: 1;
         height: 45px;
+        box-sizing: border-box;
     }
 
     .input-field::placeholder {
         color: var(--text-light);
+    }
+
+    /* Reset browser-specific styling for number inputs */
+    input[type="number"] {
+        -moz-appearance: textfield; /* Firefox */
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
 
     .btn {
@@ -201,27 +220,41 @@
         cursor: pointer;
         text-align: center;
         height: 45px;
-        width: 180px;
-        flex-shrink: 0;
+        box-sizing: border-box;
     }
-
-    .ingredient-row {
+    
+    /* Name input is always full width */
+    .name-input {
+        width: 100%;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    /* Container for the bottom inputs */
+    .inputs-container {
         display: flex;
-        gap: 10px;
+        gap: var(--spacing-md);
+    }
+    
+    /* Grid for quantity and unit */
+    .unit-quantity-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-md);
+        flex: 2;
+    }
+    
+    /* Ensure inputs take full width of their grid cell */
+    .quantity-input, .unit-input {
+        width: 100%;
+        min-width: 0; /* Prevent overflow issues */
+    }
+    
+    /* Button styling */
+    .add-btn {
+        flex: 1;
     }
 
-    .ingredient-quantity {
-        width: 120px;
-        flex-shrink: 1;
-        flex-grow: 0;
-    }
-
-    .ingredient-unit {
-        width: 150px;
-        flex-shrink: 1;
-        flex-grow: 0;
-    }
-
+    /* List styles remain the same */
     .item-list {
         margin-top: 20px;
     }
@@ -273,5 +306,29 @@
     .list-bullet {
         min-width: 20px;
         padding-top: 2px;
+    }
+
+    /* Mobile layout */
+    @media (max-width: 640px) {
+        .inputs-container {
+            flex-direction: column;
+        }
+        
+        .unit-quantity-row {
+            width: 100%;
+            display: flex; /* Changed to flexbox for better control */
+            gap: var(--spacing-md);
+            flex: none; /* Reset the flex property from desktop */
+        }
+        
+        .quantity-input, .unit-input {
+            flex: 1; /* Each input takes equal space */
+            min-width: 0; /* Prevent content from causing overflow */
+        }
+        
+        .add-btn {
+            width: 100%;
+            margin-top: 5px;
+        }
     }
 </style>

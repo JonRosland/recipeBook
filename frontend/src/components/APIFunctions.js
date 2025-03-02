@@ -232,6 +232,11 @@ export async function postRecipeApi(recipe, retries = 1) {
         recipeData.steps = recipeData.steps ? [recipeData.steps] : [];
     }
     
+    // Ensure time is a string if present
+    if (recipeData.time !== undefined && recipeData.time !== null) {
+        recipeData.time = String(recipeData.time);
+    }
+    
     console.log(`Creating new recipe at: ${baseUrl}newRecipe`);
     console.log("Recipe data:", JSON.stringify(recipeData));
     
@@ -304,13 +309,44 @@ export async function postRecipeApi(recipe, retries = 1) {
 export async function searchRecipeApi(search) {
     try {
         console.log(`Searching recipes at: ${baseUrl}search/${search}`);
+        
+        // Handle possible comma-separated ingredients
+        let searchObj;
+        try {
+            searchObj = JSON.parse(search);
+            
+            // Special handling for ingredients search
+            if (searchObj.ingredients && Array.isArray(searchObj.ingredients)) {
+                // Already handled in SearchBar.svelte
+            }
+            
+            // Handle favorites search
+            if (searchObj.favorite === true) {
+                console.log("Searching for favorite recipes");
+            }
+            
+            // Handle name search
+            if (searchObj.recipeName) {
+                console.log(`Searching for recipes with name: ${searchObj.recipeName}`);
+            }
+            
+            // Handle origin search
+            if (searchObj.origin) {
+                console.log(`Searching for recipes with origin: ${searchObj.origin}`);
+            }
+            
+        } catch (e) {
+            console.error("Error parsing search JSON:", e);
+        }
+        
         const response = await fetch(`${baseUrl}search/${search}`);
         
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
         }
         
-        return await response.json();
+        const results = await response.json();
+        return results;
     } catch (error) {
         console.error("Error searching recipes:", error);
         throw error;

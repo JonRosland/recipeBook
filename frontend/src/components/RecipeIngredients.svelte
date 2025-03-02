@@ -2,6 +2,9 @@
     export let ingredients = [];
     export let defaultPortion = 1;
 
+    // Check if ingredients exist and are not empty
+    $: hasIngredients = ingredients && ingredients.length > 0;
+
     // Ensure defaultPortion is an integer
     let basePortionSize = parseInt(defaultPortion) || 1;
     // Initialize current portion to the default
@@ -49,6 +52,7 @@
     }
 </script>
 
+{#if hasIngredients}
 <section class="recipe-section ingredients-section">
     <div class="section-header">
         <h3 class="section-title">Ingredienser</h3>
@@ -73,22 +77,19 @@
         </div>
     </div>
     <div class="ingredient-list">
-        {#if ingredients && ingredients.length > 0}
-            {#each ingredients as ingredient}
-                <div class="ingredient">
-                    <span class="ingredient-name">{ingredient.name || ""}:</span
-                    >
-                    <span class="ingredient-quantity"
-                        >{calculateQuantity(ingredient.quantity)}</span
-                    >
-                    <span class="ingredient-unit">{ingredient.unit || ""}</span>
-                </div>
-            {/each}
-        {:else}
-            <div class="no-ingredients">Ingen ingredienser registrert.</div>
-        {/if}
+        {#each ingredients as ingredient}
+            <div class="ingredient">
+                <span class="ingredient-name">{ingredient.name || ""}:</span
+                >
+                <span class="ingredient-quantity"
+                    >{calculateQuantity(ingredient.quantity)}</span
+                >
+                <span class="ingredient-unit">{ingredient.unit || ""}</span>
+            </div>
+        {/each}
     </div>
 </section>
+{/if}
 
 <style>
     .recipe-section {
@@ -179,10 +180,5 @@
     .qty-input::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
-    }
-
-    .no-ingredients {
-        font-style: italic;
-        color: var(--text-light);
     }
 </style>

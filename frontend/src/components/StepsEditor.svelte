@@ -11,6 +11,7 @@
 
     let newStep = "";
     let recipeSteps = [];
+    let textareaElement;
 
     onMount(() => {
         if (steps && steps.length > 0) {
@@ -23,6 +24,14 @@
             recipeSteps = recipe.steps || [];
         });
 
+        // Initialize textarea height for any existing content
+        setTimeout(() => {
+            if (textareaElement && newStep.length > 0) {
+                textareaElement.style.height = "45px";
+                textareaElement.style.height = textareaElement.scrollHeight + "px";
+            }
+        }, 0);
+
         return unsubscribe;
     });
 
@@ -31,6 +40,10 @@
             updateRecipeStore("steps", newStep);
             // Reset the form
             newStep = "";
+            // Reset textarea height
+            if (textareaElement) {
+                textareaElement.style.height = "45px";
+            }
         }
     }
 
@@ -44,18 +57,29 @@
     function removeStep(index) {
         deleteElementStore("steps", index);
     }
+    
+    // Auto-resize textarea as content grows
+    function resizeTextarea(event) {
+        const textarea = event.target;
+        // Reset height to get accurate scrollHeight
+        textarea.style.height = "45px";
+        // Set the height to scrollHeight to fit content
+        textarea.style.height = textarea.scrollHeight + "px";
+    }
 </script>
 
 <section class="section-card">
     <h3 class="section-title">Fremgangsmåte</h3>
 
     <div class="form-row">
-        <input
-            type="text"
-            class="input-field"
+        <textarea
+            class="textarea-field"
             placeholder="Fremgangsmåte"
             bind:value={newStep}
-        />
+            bind:this={textareaElement}
+            on:input={resizeTextarea}
+            rows="1"
+        ></textarea>
         <button class="btn" on:click={addStep}>Legg til steg</button>
     </div>
 
@@ -143,20 +167,25 @@
         display: flex;
         gap: var(--spacing-md);
         margin-bottom: var(--spacing-md);
-        align-items: stretch;
+        align-items: flex-start;
     }
 
-    .input-field {
+    .textarea-field {
         background-color: var(--input-background);
         border: none;
         border-radius: var(--input-radius);
         padding: 12px 15px;
         font-size: 16px;
         flex-grow: 1;
-        height: 45px;
+        min-height: 45px;
+        max-height: 200px;
+        overflow-y: hidden;
+        resize: none;
+        font-family: var(--default-font);
+        line-height: 1.5;
     }
 
-    .input-field::placeholder {
+    .textarea-field::placeholder {
         color: var(--text-light);
     }
 
@@ -226,5 +255,22 @@
         min-width: 25px;
         padding-top: 2px;
         font-weight: bold;
+    }
+
+    /* On smaller screens, make the button take full width on its own row */
+    @media (max-width: 640px) {
+        .form-row {
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .textarea-field {
+            width: 100%;
+        }
+
+        .btn {
+            width: 100%;
+            margin-top: 5px;
+        }
     }
 </style>

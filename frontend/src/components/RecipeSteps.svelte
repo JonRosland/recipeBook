@@ -1,24 +1,25 @@
 <script>
     export let steps = [];
+    
+    // Check if steps exist and are not empty
+    $: hasSteps = steps && steps.length > 0;
 </script>
 
+{#if hasSteps}
 <section class="recipe-section">
     <h3 class="section-title">Fremgangsmåte</h3>
     <div class="steps-content">
-        {#if steps && steps.length > 0}
-            <ol class="steps-list">
-                {#each steps as step, index}
-                    <li class="step-item">
-                        <span class="step-number">{index + 1}.</span>
-                        <span class="step-text">{step}</span>
-                    </li>
-                {/each}
-            </ol>
-        {:else}
-            <p class="no-steps">Ingen fremgangsmåte registrert.</p>
-        {/if}
+        <ol class="steps-list">
+            {#each steps as step, index}
+                <li class="step-item">
+                    <span class="step-number">{index + 1}.</span>
+                    <span class="step-text">{step}</span>
+                </li>
+            {/each}
+        </ol>
     </div>
 </section>
+{/if}
 
 <style>
     .recipe-section {
@@ -63,10 +64,5 @@
 
     .step-text {
         flex: 1;
-    }
-
-    .no-steps {
-        font-style: italic;
-        color: var(--text-light, #666666);
     }
 </style>

@@ -1,24 +1,25 @@
 <script>
     export let notes = [];
+
+    // Computed property to check if notes exist and are not empty
+    $: hasNotes = notes && notes.length > 0;
 </script>
 
+{#if hasNotes}
 <section class="recipe-section">
     <h3 class="section-title">Notater</h3>
     <div class="notes-content">
-        {#if notes && notes.length > 0}
-            <ul class="notes-list">
-                {#each notes as note}
-                    <li class="note-item">
-                        <span class="note-bullet">•</span>
-                        <span class="note-text">{note}</span>
-                    </li>
-                {/each}
-            </ul>
-        {:else}
-            <p class="no-notes">Ingen notater registrert.</p>
-        {/if}
+        <ul class="notes-list">
+            {#each notes as note}
+                <li class="note-item">
+                    <span class="note-bullet">•</span>
+                    <span class="note-text">{note}</span>
+                </li>
+            {/each}
+        </ul>
     </div>
 </section>
+{/if}
 
 <style>
     .recipe-section {
@@ -61,10 +62,5 @@
 
     .note-text {
         flex: 1;
-    }
-
-    .no-notes {
-        font-style: italic;
-        color: var(--text-light, #666666);
     }
 </style>

@@ -1,25 +1,58 @@
 ---
+import MobileLayout from './MobileLayout.astro';
+import DesktopLayout from './DesktopLayout.astro';
+
 export interface Props {
 	title: string;
 }
 
 const { title } = Astro.props;
+
+// This is now the main layout file
 ---
 
 <!doctype html>
 <html lang="no">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
+		<meta name="description" content="Jons Oppskriftsbok" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<meta charset="UTF-8" />
 		<title>{title}</title>
 	</head>
 	<body>
 		<main>
-			<slot />
+			<!-- Client-side layout detection script -->
+			<script>
+				// The threshold for desktop layout (in pixels)
+				const DESKTOP_BREAKPOINT = 1024;
+				
+				function applyLayout() {
+					const isDesktop = window.innerWidth >= DESKTOP_BREAKPOINT;
+					document.documentElement.classList.toggle('desktop-view', isDesktop);
+					document.documentElement.classList.toggle('mobile-view', !isDesktop);
+				}
+				
+				// Apply layout immediately
+				applyLayout();
+				
+				// Update on resize
+				window.addEventListener('resize', applyLayout);
+			</script>
+
+			<!-- Both layouts are rendered but only one will be visible -->
+			<div class="desktop-container">
+				<DesktopLayout title={title}>
+					<slot />
+				</DesktopLayout>
+			</div>
+
+			<div class="mobile-container">
+				<MobileLayout title={title}>
+					<slot />
+				</MobileLayout>
+			</div>
 		</main>
 	</body>
 </html>
@@ -66,6 +99,9 @@ const { title } = Astro.props;
 		--spacing-lg: 20px;
 		--spacing-xl: 25px;
 		--spacing-xxl: 30px;
+        
+        /* Container width */
+        --container-max-width: 1200px;
 	}
 
 	/* Reset styles */
@@ -109,149 +145,27 @@ const { title } = Astro.props;
 		color: var(--primary-color);
 	}
 
-	/* Common component styles */
-	.section-card {
-		background-color: var(--card-background);
-		border-radius: var(--card-radius);
-		box-shadow: var(--card-shadow);
-		padding: var(--spacing-xl);
-		margin-bottom: var(--spacing-xl);
+	/* Hide/show based on CSS classes added by JS */
+	html.desktop-view .mobile-container {
+		display: none;
 	}
-
-	.form-row {
-		display: flex;
-		gap: var(--spacing-md);
-		margin-bottom: var(--spacing-md);
-		align-items: stretch;
+	
+	html.mobile-view .desktop-container {
+		display: none;
 	}
-
-	.input-field {
-		background-color: var(--input-background);
-		border: none;
-		border-radius: var(--input-radius);
-		padding: 12px 15px;
-		font-size: 16px;
-		flex-grow: 1;
-		height: 45px;
+	
+	/* SSR initial state - mobile first */
+	.desktop-container {
+		display: none;
 	}
-
-	.input-field::placeholder {
-		color: var(--text-light);
-	}
-
-	.btn {
-		background-color: var(--primary-color);
-		color: var(--text-on-primary);
-		border: none;
-		border-radius: var(--button-radius);
-		padding: 12px 15px;
-		font-size: 16px;
-		cursor: pointer;
-		text-align: center;
-		height: 45px;
-		flex-shrink: 0;
-	}
-
-	.btn:hover {
-		background-color: var(--primary-color-dark);
-	}
-
-	.dropdown {
-		background-color: var(--primary-color);
-		color: var(--text-on-primary);
-		border: none;
-		border-radius: var(--button-radius);
-		padding: 12px 35px 12px 15px;
-		font-size: 16px;
-		appearance: none;
-		background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-		background-repeat: no-repeat;
-		background-position: right 10px center;
-		background-size: 16px;
-		cursor: pointer;
-	}
-
-	.dropdown:hover {
-		background-color: var(--primary-color-dark);
-	}
-
-	/* Lists */
-	.item-list {
-		margin-top: var(--spacing-lg);
-	}
-
-	.list-item {
-		display: flex;
-		align-items: flex-start;
-		margin-bottom: var(--spacing-md);
-	}
-
-	.list-item-content {
-		flex-grow: 1;
-		padding-left: var(--spacing-sm);
-		padding-right: var(--spacing-sm);
-		word-break: break-word;
-	}
-
-	.list-bullet {
-		min-width: 20px;
-		padding-top: 2px;
-	}
-
-	/* Action buttons */
-	.action-buttons {
-		display: flex;
-		gap: 5px;
-	}
-
-	.action-btn {
-		width: 40px;
-		height: 40px;
-		border-radius: 5px;
-		border: none;
-		background-color: var(--primary-color);
-		color: var(--text-on-primary);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-	}
-
-	.action-btn:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	.back-icon,
-	.edit-icon,
-	.save-icon,
-	.favorite-icon,
-	.search-icon,
-	.action-icon {
-		width: 24px;
-		height: 24px;
-		color: var(--icon-color);
-	}
-
-	/* Responsive adjustments */
-	@media (max-width: 768px) {
-		.section-card {
-			padding: var(--spacing-lg);
+	
+	/* For larger screens even before JS loads */
+	@media (min-width: 1024px) {
+		.desktop-container {
+			display: block;
 		}
-
-		.form-row {
-			flex-direction: column;
-			gap: var(--spacing-sm);
-		}
-
-		.input-field,
-		.btn,
-		.dropdown {
-			width: 100%;
-		}
-
-		.action-buttons {
-			flex-wrap: wrap;
+		.mobile-container {
+			display: none;
 		}
 	}
 </style>

@@ -12,7 +12,7 @@ const recipes = await getRecipesApi().catch((error) => {
 });
 ---
 
-<Layout title="Cookbook App">
+<Layout title="Oppskrifter">
     <div class="container">
         <header>
             <h1 class="page-title">Oppskrifter</h1>
@@ -21,15 +21,27 @@ const recipes = await getRecipesApi().catch((error) => {
         <SearchBar client:load />
         <RecipeGrid client:load recipes={recipes} />
 
-        <a href="/recipe/new" class="add-button" aria-label="Add new recipe"
-            >+</a
-        >
+        <div class="add-button-wrapper">
+            <a href="/recipe/new" class="add-button" aria-label="Add new recipe">
+                <svg
+                    class="add-icon"
+                    viewBox="0 0 24 24"
+                    stroke="var(--text-on-primary)"
+                    stroke-width="2"
+                    fill="none"
+                >
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span class="add-text">Ny Oppskrift</span>
+            </a>
+        </div>
     </div>
 </Layout>
 
 <style>
     .container {
-        max-width: 640px;
+        max-width: var(--container-max-width);
         margin: 0 auto;
         padding: var(--spacing-lg);
         position: relative;
@@ -43,10 +55,17 @@ const recipes = await getRecipesApi().catch((error) => {
         text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
     }
 
-    .add-button {
-        position: fixed;
+    .add-button-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        position: sticky;
         bottom: var(--spacing-xxl);
-        right: var(--spacing-xxl);
+        z-index: 1000;
+    }
+
+    .add-button {
         width: 70px;
         height: 70px;
         background-color: var(--primary-color);
@@ -54,14 +73,57 @@ const recipes = await getRecipesApi().catch((error) => {
         display: flex;
         justify-content: center;
         align-items: center;
-        color: var(--primary-color-dark);
+        color: var(--text-on-primary);
         font-size: 70px;
         line-height: 1;
         text-decoration: none;
         box-shadow: var(--floating-button-shadow);
+        transition: all 0.3s ease;
+    }
+    
+    .add-text {
+        display: none;
     }
 
-    @media (max-width: 768px) {
+    .add-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    @media (min-width: 768px) {
+        .page-title {
+            font-size: 72px;
+        }
+    }
+    
+    @media (min-width: 1024px) {
+        .container {
+            padding: var(--spacing-xxl);
+        }
+        
+        .add-button {
+            width: auto;
+            height: 56px;
+            border-radius: 28px;
+            padding: 0 24px;
+            font-size: inherit;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .add-text {
+            display: inline;
+            font-weight: 500;
+            font-size: 18px;
+        }
+        
+        .add-icon {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    @media (max-width: 480px) {
         .page-title {
             font-size: 48px;
         }
@@ -70,6 +132,15 @@ const recipes = await getRecipesApi().catch((error) => {
             width: 60px;
             height: 60px;
             font-size: 60px;
+        }
+        
+        .add-icon {
+            width: 30px;
+            height: 30px;
+        }
+        
+        .add-button-wrapper {
+            justify-content: flex-end;
         }
     }
 </style>

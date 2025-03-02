@@ -39,17 +39,29 @@ if (!recipe) {
             <h1 class="recipe-title">Rediger Oppskrift</h1>
         </header>
 
-        <!-- Information Section -->
-        <RecipeInformation client:load recipeData={recipe} />
+        <div class="editor-layout">
+            <!-- First row on desktop: Information and Notes -->
+            <div class="editor-row info-notes-row">
+                <div class="editor-section info-section">
+                    <RecipeInformation client:load recipeData={recipe} />
+                </div>
 
-        <!-- Ingredients Section -->
-        <IngredientEditor client:load ingredients={recipe.ingredients} />
+                <div class="editor-section notes-section">
+                    <NotesEditor client:load notes={recipe.notes} />
+                </div>
+            </div>
 
-        <!-- Steps Section -->
-        <StepsEditor client:load steps={recipe.steps} />
+            <!-- Second row on desktop: Ingredients and Steps -->
+            <div class="editor-row ingredients-steps-row">
+                <div class="editor-section ingredients-section">
+                    <IngredientEditor client:load ingredients={recipe.ingredients} />
+                </div>
 
-        <!-- Notes Section -->
-        <NotesEditor client:load notes={recipe.notes} />
+                <div class="editor-section steps-section">
+                    <StepsEditor client:load steps={recipe.steps} />
+                </div>
+            </div>
+        </div>
 
         <!-- Save Button -->
         <SaveButton client:load isNewRecipe={false} recipeId={id} />
@@ -89,5 +101,35 @@ if (!recipe) {
     .back-icon {
         width: 32px;
         height: 32px;
+    }
+    
+    /* On mobile, everything is stacked */
+    .editor-layout {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+    }
+    
+    .editor-row {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+    }
+    
+    /* Desktop layout */
+    @media (min-width: 1024px) {
+        .container {
+            max-width: 1200px;
+        }
+        
+        .editor-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+        }
+        
+        .info-notes-row, .ingredients-steps-row {
+            margin-bottom: var(--spacing-xl);
+        }
     }
 </style>
